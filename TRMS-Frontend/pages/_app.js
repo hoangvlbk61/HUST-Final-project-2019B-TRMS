@@ -48,7 +48,7 @@ class MyApp extends App {
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
           <link rel="shortcut icon" href="/static/images/triangle.png" />
-          <title>One - React Next.js Ant Design Dashboard</title>
+          <title>TRMS - Hust final project</title>
           <link
             href="https://fonts.googleapis.com/css?family=Anonymous+Pro:400,700"
             rel="stylesheet"

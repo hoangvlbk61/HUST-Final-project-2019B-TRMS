@@ -40,14 +40,14 @@ const Page = ({ router, children }) => {
         >
           {!isNotDashboard && <Header />}
           <Layout className="workspace">
-            {!isNotDashboard && (
+            {/* {!isNotDashboard && (
               <SidebarMenu
                 sidebarTheme={state.darkSidebar ? 'dark' : 'light'}
                 sidebarMode={state.sidebarPopup ? 'vertical' : 'inline'}
                 sidebarIcons={state.sidebarIcons}
                 collapsed={state.collapsed}
               />
-            )}
+            )} */}
 
             <Layout>
               <Content>
