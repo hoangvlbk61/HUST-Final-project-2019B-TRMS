@@ -1,16 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+/** @format */
 
-RecordManagement.propTypes = {
-    
-};
+import Record from "../components/Record";
 
-function RecordManagement(props) {
-    return (
-        <div>
-            This is record screen
-        </div>
-    );
-}
+const RecordPage = () => <Record />;
 
-export default RecordManagement;
+export default RecordPage;

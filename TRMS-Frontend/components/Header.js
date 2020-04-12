@@ -109,7 +109,7 @@ const MainHeader = () => {
 				<span className="mr-auto" />
 
 				<Menu mode="horizontal">
-					{!state.mobile && (
+					{/* {!state.mobile && (
 						<Menu.Item
 							onClick={() => dispatch({ type: "fullscreen" })}
 						>
@@ -122,7 +122,7 @@ const MainHeader = () => {
 					)}
 					<Menu.Item onClick={() => dispatch({ type: "options" })}>
 						<Settings size={20} strokeWidth={1} />
-					</Menu.Item>
+					</Menu.Item> */}
 					<SubMenu
 						title={
 							<Badge count={5}>

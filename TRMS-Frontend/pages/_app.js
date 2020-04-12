@@ -1,6 +1,8 @@
 import '../assets/styles.less';
-
-import App from 'next/app';
+import { Provider } from 'react-redux';
+import withRedux from 'next-redux-wrapper';
+import makeStore from '../redux-saga/store';
+import App, { Container } from 'next/app';
 
 import AppProvider from '../components/shared/AppProvider';
 import { GlobalStyles } from '../components/styles/GlobalStyles';
@@ -35,36 +37,35 @@ class MyApp extends App {
   // }
 
   render() {
-    const { Component, pageProps } = this.props;
+		const { Component, pageProps, store } = this.props;
 
-    return (
-      <>
-        <GlobalStyles />
-        <Head>
-          <meta
-            name="viewport"
-            content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width,height=device-height"
-          />
-          <meta charSet="utf-8" />
-          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <link rel="shortcut icon" href="/static/images/triangle.png" />
-          <title>TRMS - Hust final project</title>
-          <link
-            href="https://fonts.googleapis.com/css?family=Anonymous+Pro:400,700"
-            rel="stylesheet"
-          />
-          {pageProps.ieBrowser && (
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.2.5/polyfill.min.js" />
-          )}
-        </Head>
-        <AppProvider>
-          <Page>
-            <Component {...pageProps} />
-          </Page>
-        </AppProvider>
-      </>
-    );
-  }
+		return (
+			<Container>
+				<Provider store={store}>
+					<GlobalStyles />
+					<Head>
+						<meta
+							name="viewport"
+							content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width,height=device-height"
+						/>	
+						<meta charSet="utf-8" />
+						<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+						<link rel="shortcut icon" href="/static/images/Headbot.png" />
+						<title> SBot </title>{' '}
+						<link href="https://fonts.googleapis.com/css?family=Anonymous+Pro:400,700" rel="stylesheet" />{' '}
+						{pageProps.ieBrowser && (
+							<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.2.5/polyfill.min.js" />
+						)}{' '}
+					</Head>{' '}
+					<AppProvider>
+						<Page>
+							<Component {...pageProps} />{' '}
+						</Page>{' '}
+					</AppProvider>{' '}
+				</Provider>
+			</Container>
+		);
+	}
 }
 
-export default MyApp;
+export default withRedux(makeStore)(MyApp);
