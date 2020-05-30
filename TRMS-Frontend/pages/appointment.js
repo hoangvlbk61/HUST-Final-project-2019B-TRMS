@@ -1,16 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+/** @format */
 
-AppointmentManagement.propTypes = {
-    
-};
+import Appointment from "../components/Appointment";
 
-function AppointmentManagement(props) {
-    return (
-        <div>
-            This is record screen
-        </div>
-    );
-}
+const AppointmentPage = () => <Appointment />;
 
-export default AppointmentManagement;
+export default AppointmentPage;

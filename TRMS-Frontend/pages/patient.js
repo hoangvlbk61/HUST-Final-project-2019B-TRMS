@@ -1,16 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+/** @format */
 
-PatientManagement.propTypes = {
-    
-};
+import Patient from "../components/Patient";
 
-function PatientManagement(props) {
-    return (
-        <div>
-            This is record screen
-        </div>
-    );
-}
+const PatientPage = () => <Patient />;
 
-export default PatientManagement;
+export default PatientPage;

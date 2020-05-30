@@ -13,8 +13,8 @@ import {
 	Activity,
 	Clipboard,
 	Users,
-	Slash,
-	Calendar
+	Calendar,
+	Link2,
 } from "react-feather";
 import DashHeader, { Notification } from "./styles/Header";
 import Link from "next/link";
@@ -77,7 +77,7 @@ const MainHeader = () => {
 							<Link href="/medication">
 								<a className="header-icon-routes">
 									{" "}
-									<Slash size={20} /> Quản lý thuốc
+									<Link2 size={20} /> Quản lý thuốc
 								</a>
 							</Link>
 						</Menu.Item>
@@ -109,7 +109,7 @@ const MainHeader = () => {
 				<span className="mr-auto" />
 
 				<Menu mode="horizontal">
-					{/* {!state.mobile && (
+					{!state.mobile && (
 						<Menu.Item
 							onClick={() => dispatch({ type: "fullscreen" })}
 						>
@@ -122,7 +122,7 @@ const MainHeader = () => {
 					)}
 					<Menu.Item onClick={() => dispatch({ type: "options" })}>
 						<Settings size={20} strokeWidth={1} />
-					</Menu.Item> */}
+					</Menu.Item>
 					<SubMenu
 						title={
 							<Badge count={5}>
@@ -141,16 +141,12 @@ const MainHeader = () => {
 								itemLayout="horizontal"
 								dataSource={notifications}
 								footer={<div>5 Notifications</div>}
-								renderItem={item => (
+								renderItem={(item) => (
 									<Notification>
 										<List.Item>
 											<List.Item.Meta
 												avatar={item.avatar}
-												title={
-													<a href="javascript:;">
-														{item.title}
-													</a>
-												}
+												title={<a>{item.title}</a>}
 												description={
 													<small>
 														{item.description}

@@ -1,16 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+/** @format */
 
-MedicationManagement.propTypes = {
-    
-};
+import Medication from "../components/Medication";
 
-function MedicationManagement(props) {
-    return (
-        <div>
-            This is record screen
-        </div>
-    );
-}
+const MedicationPage = () => <Medication />;
 
-export default MedicationManagement;
+export default MedicationPage;

@@ -51,7 +51,7 @@ class MyApp extends App {
 						<meta charSet="utf-8" />
 						<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 						<link rel="shortcut icon" href="/static/images/Headbot.png" />
-						<title> SBot </title>{' '}
+						<title> TRM System </title>{' '}
 						<link href="https://fonts.googleapis.com/css?family=Anonymous+Pro:400,700" rel="stylesheet" />{' '}
 						{pageProps.ieBrowser && (
 							<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.2.5/polyfill.min.js" />
