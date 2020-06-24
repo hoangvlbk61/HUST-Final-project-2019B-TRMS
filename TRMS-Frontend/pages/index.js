@@ -1,13 +1,14 @@
-import Head from 'next/head';
-import Overview from '../components/Overview';
+import Overview from '../components/Overview'
+import withData from '../lib/withData'
+import { Card } from 'antd'
+import { withAuthSync } from '../unities/auth'
 
-const OverviewPage = () => (
-  <>
-    <Head>
-      <link rel="stylesheet" href="/static/react-vis.css" />
-    </Head>
-    <Overview />
-  </>
-);
+const Home = withData(()=>{
+    return (
+        <Card>
+            <Overview></Overview>
+        </Card>
+    )
+})
 
-export default OverviewPage;
+export default withAuthSync(Home)

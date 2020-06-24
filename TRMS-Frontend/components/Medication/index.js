@@ -10,14 +10,18 @@ import {
 	medicationUpdate,
 } from "./action";
 
-const mapActionToProps = () => ({
+const mapActionToProps = {
 	medicationCreate,
 	medicationDelete,
 	medicationDetail,
 	medicationFetch,
 	medicationUpdate,
-});
+};
 
-const mapStateToProps = (state) => state;
+const mapStateToProps = (state) => {
+	return {
+		medication: state.medication,
+	};
+};
 
 export default connect(mapStateToProps, mapActionToProps)(MedicationManagement);

@@ -1,122 +1,162 @@
-import { Button, Checkbox, Form, Input, message, Row } from 'antd';
-import { Eye, Mail, Triangle } from 'react-feather';
+/** @format */
 
-import Link from 'next/link';
-import Router from 'next/router';
-import styled from 'styled-components';
+import { Button, Checkbox, Form, Input, message, Row } from "antd";
+import { Eye, Mail, Triangle } from "react-feather";
 
+import Link from "next/link";
+import Router from "next/router";
+import styled from "styled-components";
+import { gql } from "apollo-boost";
+import { login } from "../unities/auth";
+import { useCallback } from "react";
+import { useMutation } from "react-apollo";
 const FormItem = Form.Item;
 
+const TOKEN_AUTH = gql`
+	mutation tokenAuth($email: String!, $password: String!) {
+		tokenAuth(email: $email, password: $password) {
+			token
+			user {
+				doctors {
+					id
+				}
+				nurse {
+					id
+				}
+				patient {
+					id
+				}
+			}
+		}
+	}
+`;
 const Content = styled.div`
-  max-width: 400px;
-  z-index: 2;
-  min-width: 300px;
+	max-width: 400px;
+	z-index: 2;
+	min-width: 300px;
 `;
 
-const Signin = ({ form }) => (
-  <Row
-    type="flex"
-    align="middle"
-    justify="center"
-    className="px-3 bg-white mh-page"
-    style={{ minHeight: '100vh' }}
-  >
-    <Content>
-      <div className="text-center mb-5">
-        <Link href="/signin">
-          <a className="brand mr-0">
-            <Triangle size={32} strokeWidth={1} />
-          </a>
-        </Link>
-        <h5 className="mb-0 mt-3">Sign in</h5>
+const Signin = () => {
+	const [form] = Form.useForm();
 
-        <p className="text-muted">get started with our service</p>
-      </div>
+	const [tokenAuth, { error, data }] = useMutation(TOKEN_AUTH);
 
-      <Form
-        layout="vertical"
-        onSubmit={e => {
-          e.preventDefault();
-          form.validateFields((err, values) => {
-            if (!err) {
-              message.success(
-                'Sign complete. Taking you to your dashboard!'
-              ).then(() => Router.push('/'));
-            }
-          });
-        }}
-      >
-        <FormItem label="Email">
-          {form.getFieldDecorator('email', {
-            rules: [
-              {
-                type: 'email',
-                message: 'The input is not valid E-mail!'
-              },
-              {
-                required: true,
-                message: 'Please input your E-mail!'
-              }
-            ]
-          })(
-            <Input
-              prefix={
-                <Mail
-                  size={16}
-                  strokeWidth={1}
-                  style={{ color: 'rgba(0,0,0,.25)' }}
-                />
-              }
-              type="email"
-              placeholder="Email"
-            />
-          )}
-        </FormItem>
+	const onFinish = useCallback((value) => {
+		console.log("Submited form successfully", value);
+		tokenAuth({
+			variables: value,
+			update(proxy, mutationResult) {
+				const { token, user } = mutationResult.data.tokenAuth;
+				console.log(token);
+				console.log(user);
+				localStorage.setItem("user", JSON.stringify(user))
+				login({ token });
+			},
+		});
+	}, []);
+	return (
+		<Row
+			type="flex"
+			align="middle"
+			justify="center"
+			className="px-3 bg-white mh-page"
+			style={{ minHeight: "100vh" }}
+		>
+			<Content>
+				<div className="text-center mb-5">
+					<Link href="/signin">
+						<a className="brand mr-0">
+							<Triangle size={32} strokeWidth={1} />
+						</a>
+					</Link>
+					<h5 className="mb-0 mt-3">Đăng nhập</h5>
 
-        <FormItem label="Password">
-          {form.getFieldDecorator('password', {
-            rules: [{ required: true, message: 'Please input your Password!' }]
-          })(
-            <Input
-              prefix={
-                <Eye
-                  size={16}
-                  strokeWidth={1}
-                  style={{ color: 'rgba(0,0,0,.25)' }}
-                />
-              }
-              type="password"
-              placeholder="Password"
-            />
-          )}
-        </FormItem>
+					<p className="text-muted">
+						để sử dụng dịch vụ của chúng tôi
+					</p>
+				</div>
 
-        <FormItem>
-          {form.getFieldDecorator('remember', {
-            valuePropName: 'checked',
-            initialValue: true
-          })(<Checkbox>Remember me</Checkbox>)}
-          <Link href="/forgot">
-            <a className="text-xs-right">
-              <small>Forgot password</small>
-            </a>
-          </Link>
-          <Button type="primary" htmlType="submit" block className="mt-3">
-            Log in
-          </Button>
-        </FormItem>
+				<Form layout="vertical" onFinish={onFinish}>
+					<FormItem
+						label="Email"
+						name="email"
+						rules={[
+							{
+								type: "email",
+								message: "The input is not valid E-mail!",
+							},
+							{
+								required: true,
+								message: "Please input your E-mail!",
+							},
+						]}
+					>
+						<Input
+							prefix={
+								<Mail
+									size={16}
+									strokeWidth={1}
+									style={{ color: "rgba(0,0,0,.25)" }}
+								/>
+							}
+							type="email"
+							placeholder="Email"
+						/>
+					</FormItem>
 
-        <div className="text-center">
-          <small className="text-muted">
-            <span>Don't have an account yet?</span>{' '}
-            <Link href="/signup">
-              <a>&nbsp;Create one now!</a>
-            </Link>
-          </small>
-        </div>
-      </Form>
-    </Content>
-  </Row>
-);
+					<FormItem
+						label="Password"
+						name="password"
+						rules={[
+							{
+								required: true,
+								message: "Please input your Password!",
+							},
+						]}
+					>
+						<Input
+							prefix={
+								<Eye
+									size={16}
+									strokeWidth={1}
+									style={{ color: "rgba(0,0,0,.25)" }}
+								/>
+							}
+							type="password"
+							placeholder="Password"
+							autoComplete="current-password"
+						/>
+					</FormItem>
 
-export default Form.create()(Signin);
+					<FormItem valuePropName="checked" initialvalue={"true"}>
+						<Checkbox name="remember">Remember me</Checkbox>
+						<Link href="/forgot">
+							<a className="text-xs-right">
+								<small>Forgot password</small>
+							</a>
+						</Link>
+						<Button
+							type="primary"
+							htmlType="submit"
+							block
+							className="mt-3"
+						>
+							Log in
+						</Button>
+					</FormItem>
+
+					<div className="text-center">
+						<small className="text-muted">
+							<span>Don't have an account yet?</span>{" "}
+							<Link href="/signup">
+								<a>&nbsp;Create one now!</a>
+							</Link>
+						</small>
+					</div>
+				</Form>
+			</Content>
+		</Row>
+	);
+};
+
+export default Signin;

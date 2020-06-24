@@ -1,17 +1,29 @@
 /** @format */
 
 import { Input, Table, Button, Space } from "antd";
-import Highlighter from 'react-highlight-words';
+import Highlighter from "react-highlight-words";
 import PropTypes from "prop-types";
-import { DataTableFrame } from "../styles/DataTable";
+import { useState, useRef } from "react";
+import Link from "next/link";
+import moment from "moment";
 import { Trash, Edit } from "react-feather";
 import { SearchOutlined } from "@ant-design/icons";
-import "../styles/tableStyle.less";
-import { useState, useRef } from "react";
 
+import { DataTableFrame } from "../styles/DataTable";
+import "../styles/tableStyle.less";
+import { APM_STATUS } from "../../const/componentConst";
 const defaultIconSize = 20;
 const defaultIconColor = "white";
 const defaultActionBtnSize = "default";
+
+const checkStatus = (apmArray) => {
+	if (apmArray.length === 0) return APM_STATUS.NONE;
+	const latestApm = apmArray[0];
+	if (latestApm.status === "END") return APM_STATUS.END;
+	return `${APM_STATUS.WAITING} ${moment(latestApm.time)
+		.locale("vi")
+		.fromNow()}`;
+};
 
 const InfoTable = ({ showEditAction, showDeleteAction, dataSource }) => {
 	var searchInput = React.createRef(null);
@@ -118,12 +130,22 @@ const InfoTable = ({ showEditAction, showDeleteAction, dataSource }) => {
 					dataIndex: "name",
 					key: "name",
 					...getColumnSearchProps("name"),
+					render: (text, record) => (
+						<Link
+							href={{
+								pathname: "/record/recordDetail",
+								query: { recordId: record.key },
+							}}
+						>
+							<a>{text}</a>
+						</Link>
+					),
 				},
 				{
-					title: "Tuổi",
-					dataIndex: "age",
-					key: "age",
-					...getColumnSearchProps("age"),
+					title: "SSID",
+					dataIndex: "ssid",
+					key: "ssid",
+					...getColumnSearchProps("ssid"),
 				},
 				{
 					title: "Địa chỉ",
@@ -133,9 +155,9 @@ const InfoTable = ({ showEditAction, showDeleteAction, dataSource }) => {
 				},
 				{
 					title: "Trang thái cuộc hẹn",
-					dataIndex: "apmStatus",
-					key: "apmStatus",
-					...getColumnSearchProps("apmStatus"),
+					key: "appointment",
+					render: (text, record) => checkStatus(record.appointment),
+					// ...getColumnSearchProps("appointment"),
 				},
 				{
 					title: "Thao tác",

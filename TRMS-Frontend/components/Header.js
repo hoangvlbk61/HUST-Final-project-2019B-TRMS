@@ -22,7 +22,7 @@ import MockNotifications from "../demos/mock/notifications";
 import { useAppState } from "./shared/AppProvider";
 import { useState } from "react";
 import "./styles/header.less";
-
+import { logout } from "../unities/auth";
 const { SubMenu } = Menu;
 const { Header } = Layout;
 
@@ -40,7 +40,7 @@ const MainHeader = () => {
 						<BarChart size={20} strokeWidth={1} />
 					</a>
 				)}
-				<Link href="/">
+				<Link href="/record">
 					<a className="brand">
 						<FilePlus size={24} strokeWidth={1} />
 						<strong className="mx-1 text-black">
@@ -61,7 +61,7 @@ const MainHeader = () => {
 						</Menu.Item>
 					)}
 
-					{!state.mobile && (
+					{/* {!state.mobile && (
 						<Menu.Item>
 							<Link href="/patient">
 								<a className="header-icon-routes">
@@ -70,7 +70,7 @@ const MainHeader = () => {
 								</a>
 							</Link>
 						</Menu.Item>
-					)}
+					)} */}
 
 					{!state.mobile && (
 						<Menu.Item>
@@ -98,10 +98,30 @@ const MainHeader = () => {
 						<SubMenu
 							title={<ChevronsDown size={20} strokeWidth={1} />}
 						>
-							<Menu.Item>Calendar</Menu.Item>
-							<Menu.Item>Messages</Menu.Item>
-							<Menu.Item>Social</Menu.Item>
-							<Menu.Item>Chat</Menu.Item>
+							<Menu.Item>
+								<Link href="/record">
+									<a className="header-icon-routes">
+										{" "}
+										<Clipboard size={20} /> Quản lý bệnh án
+									</a>
+								</Link>
+							</Menu.Item>
+							<Menu.Item>
+								<Link href="/medication">
+									<a className="header-icon-routes">
+										{" "}
+										<Link2 size={20} /> Quản lý thuốc
+									</a>
+								</Link>
+							</Menu.Item>
+							<Menu.Item>
+								<Link href="/appointment">
+									<a className="header-icon-routes">
+										{" "}
+										<Calendar size={20} /> Quản lý cuộc hẹn
+									</a>
+								</Link>
+							</Menu.Item>
 						</SubMenu>
 					)}
 				</Menu>
@@ -170,7 +190,7 @@ const MainHeader = () => {
 								<a>Help?</a>
 							</Link>
 						</Menu.Item>
-						<Menu.Item>Signout</Menu.Item>
+						<Menu.Item onClick={logout}>Signout</Menu.Item>
 					</SubMenu>
 				</Menu>
 			</Header>

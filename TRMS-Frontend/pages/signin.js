@@ -1,5 +1,12 @@
-import Signin from '../components/Signin';
+/** @format */
 
-const SigninPage = () => <Signin />;
+import withData from "../lib/withData";
+import Signin from "../components/Signin";
 
-export default SigninPage;
+const SignPage = withData(() => (
+	<div>
+		<Signin />
+	</div>
+));
+
+export default SignPage;

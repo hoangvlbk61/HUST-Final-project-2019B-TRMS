@@ -3,7 +3,7 @@
 import { Card, Table, Button } from "antd";
 import PropTypes from "prop-types";
 import { DataTableFrame } from "../styles/DataTable";
-import { Trash, Edit, CheckCircle, XCircle } from "react-feather";
+import { Trash, Edit, CheckCircle, XCircle, AlertCircle } from "react-feather";
 import "../styles/tableStyle.less";
 
 const defaultIconSize = 20;
@@ -16,10 +16,11 @@ const InfoTable = ({ showEditAction, showDeleteAction, dataSource }) => {
 		showEditAction(record);
 	};
 	const handleClickDelete = (record) => () => {
-    showDeleteAction(record);
-  };
+		showDeleteAction(record);
+	};
 	return (
 		<Table
+			scroll={{ y: 400 }}
 			dataSource={dataSource}
 			columns={[
 				{
@@ -36,16 +37,12 @@ const InfoTable = ({ showEditAction, showDeleteAction, dataSource }) => {
 					title: "Tên công ty sản xuất",
 					dataIndex: "companyName",
 					key: "companyName",
-				},
-				{
-					title: "Mô tả",
-					dataIndex: "description",
-					key: "description",
+					width: 300,
 				},
 				{
 					title: "Loại thuốc",
-					dataIndex: "typeId",
-					key: "typeId",
+					dataIndex: "medicationType",
+					key: "medicationType",
 				},
 				{
 					title: "Được mua tự do",

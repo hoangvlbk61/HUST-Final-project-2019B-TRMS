@@ -247,7 +247,7 @@ const SidebarContent = ({
             >
               <DashHeader>
                 <Header>
-                  <Link href="/">
+                  <Link href="/record">
                     <a className="brand">
                       <Triangle size={24} strokeWidth={1} />
                       <strong

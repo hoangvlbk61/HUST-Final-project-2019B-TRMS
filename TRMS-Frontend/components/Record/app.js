@@ -2,46 +2,24 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Card, Modal } from "antd";
+import { Card, Modal, message } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { useQuery, useMutation } from "@apollo/react-hooks";
+
 import { DataTableFrame } from "../styles/DataTable";
 import RecordForm from "./form";
 import { FORM_MODE } from "../../const/componentConst";
 import InforTable from "./infoTable";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
-import InputPanel from "../shared/InputPanel";
+import { FETCH_ALL, CREATE, UPDATE, DELETE } from "../../const/gql/record";
 const { confirm } = Modal;
-
-const dataSource = [
-	{
-		key: "1",
-		name: "Mike",
-		age: 32,
-		address: "10 Downing Street",
-		apmStatus: "default",
-	},
-	{
-		key: "2",
-		name: "John",
-		age: 42,
-		address: "10 Downing Street",
-		apmStatus: "danger",
-	},
-	{
-		key: "3",
-		name: "Gif cungx dc",
-		age: 23,
-		address: "Dia chi",
-		apmStatus: "De dai",
-	},
-];
 
 const defaultModel = {
 	name: "",
 	age: "",
 	gender: "",
-	occupation: "",
 	address: "",
 	infomation: "",
+	ssid: 0
 };
 
 function RecordManagement({
@@ -53,22 +31,74 @@ function RecordManagement({
 }) {
 	const [formMode, setFormMode] = useState(FORM_MODE.NONE);
 	const [model, setModel] = useState(defaultModel);
+	const [
+		createRecord,
+		{ loading: createLoading, error: createError },
+	] = useMutation(CREATE);
+	const [
+		updateRecord,
+		{ loading: updateLoading, error: updateError },
+	] = useMutation(UPDATE);
+	const [
+		deleteRecord,
+		{ loading: deleteLoading, error: deleteError },
+	] = useMutation(DELETE);
+	const {
+		data = {},
+		error: fetchingError,
+		loading: fetchingLoading,
+		refetch,
+	} = useQuery(FETCH_ALL, {
+		variables: {},
+		fetchPolicy: "no-cache",
+		notifyOnNetworkStatusChange: true,
+	});
+	useEffect(() => {
+		let fetchErr = fetchingError ? `${fetchingError.message}` : null;
+		let createErr = createError ? `${createError.message}` : null;
+		let updateErr = updateError ? `${updateError.message}` : null;
+		let deleteErr = deleteError ? `${deleteError.message}` : null;
 
-	// useEffect(() => {
-	// 	recordFetch();
-	// }, [recordFetch]);
+		if (fetchErr) {
+			message.error(fetchErr);
+			fetchErr = null;
+		}
+		if (createErr) {
+			message.error(createErr);
+			createErr = null;
+		}
+		if (updateErr) {
+			message.error(updateErr);
+			updateErr = null;
+		}
+		if (deleteErr) {
+			message.error(deleteErr);
+			deleteErr = null;
+		}
+	}, [createError, fetchingError, updateError, deleteError]);
 
-	const showDeleteModal = () => {
+	const dataSource = ((data && data.patientList) || []).map((e) => ({
+		...e,
+		key: e.id,
+	}));
+	console.log("dataSource: ", dataSource);
+	
+	const showDeleteModal = (record) => {
 		confirm({
 			title: "Xác nhận?",
 			icon: <ExclamationCircleOutlined />,
-			content: "Bạn có chắc muốn xóa loại thuốc này",
+			content: "Bạn có chắc muốn xóa bệnh án này ?",
 			okText: "Có",
 			okType: "danger",
 			cancelText: "Hủy",
 			onOk() {
-				recordDelete(model.id);
-				console.log("OK");
+				deleteRecord({
+					variables: { patientId: record.id },
+					update: (proxy, mutationResult) => {
+						message.success("Xóa bệnh án thành công!");
+						refetch();
+					},
+				});
 			},
 			onCancel() {
 				console.log("Cancel");
@@ -86,26 +116,41 @@ function RecordManagement({
 		setFormMode(FORM_MODE.REGISTER);
 	};
 	const showUpdateForm = (record) => {
-		console.log("click Edit ");
-
 		setFormMode(FORM_MODE.UPDATE);
 		setModel(record);
 	};
 	const showDeleteForm = (record) => {
-		console.log("LOGGGGGGGGGGG: ", record);
-		showDeleteModal();
-		// setFormMode(FORM_MODE.DELETE);
-		// setModel(record);
+		showDeleteModal(record);
 	};
 
 	const handleSubmit = (formValues) => {
 		// process formValues
 		switch (formMode) {
 			case FORM_MODE.REGISTER:
-				recordCreate(formValues);
+				createRecord({
+					variables: { patientInfo: formValues },
+					update: (proxy, mutationResult) => {
+						console.log("Create result: ", mutationResult);
+						
+						message.success("Thêm mới bệnh nhân thành công!");
+						refetch();
+					},
+				});
 				break;
 			case FORM_MODE.UPDATE:
-				recordUpdate(formValues);
+				updateRecord({
+					variables: {
+						patientId: formValues.patientId,
+						patientInfo: {
+							...formValues,
+							patientId: undefined,
+						},
+					},
+					update: (proxy, mutationResult) => {
+						message.success("Sửa thông tin bệnh nhân thành công!");
+						refetch();
+					},
+				});
 				break;
 			default:
 				break;
@@ -114,7 +159,7 @@ function RecordManagement({
 	return (
 		<Card
 			title="Quản lý bệnh án "
-			extra={<a onClick={() => showRegisterForm()}>Khám mới</a>}
+			extra={<a onClick={() => showRegisterForm()}>Thêm bệnh án</a>}
 		>
 			<RecordForm
 				mode={formMode}

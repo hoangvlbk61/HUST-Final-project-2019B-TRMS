@@ -1,26 +1,43 @@
 /** @format */
 
-import React from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import { Calendar, Timeline } from "antd";
-
+import moment from "moment";
+import { APPOINTMENT_STATUS } from "../../const/componentConst";
 const { Item } = Timeline;
 
-const CalendarGrid = (props) => {
+const CalendarGrid = ({ onChangeDayPicker, appointmentList }) => {
+	console.log("appointmentListappointmentList: ", appointmentList);
+	const dateSource = appointmentList.map((e) => ({
+		...e,
+		key: e.id,
+	}));
+
+	const mappingApm = useCallback((apm) => {
+		const { time } = apm;
+		const viTime = moment(time).locale("vi");
+		const tm = viTime.format("HH:mm");
+		const dt = viTime.format("DD-MM-YYYY");
+		let color = "green";
+		if (moment(time) < moment()) {
+			if (apm.status === "END") color = "gray";
+			else if (apm.status === "WAITING") color = "red";
+		}
+		return (
+			<Item color={color}>
+				Gặp bệnh nhân {apm.patient.name} lúc {tm} ngày {dt} tại{" "}
+				{apm.address} ({APPOINTMENT_STATUS[apm.status]})
+			</Item>
+		);
+	}, []);
 	return (
 		<div className="grid-calendar">
 			<div className="calendar-area">
-				<Calendar fullscreen={false} />
+				<Calendar fullscreen={false} onChange={onChangeDayPicker} />
 			</div>
 			<div className="timeline-area">
-				<Timeline>
-					<Item color="green">Gặp bệnh nhân X lúc 16h20 ngày 2020-28-04 tại bệnh viện Y </Item>
-					<Item color="green">Gặp bệnh nhân X lúc 15h20 ngày 2020-28-04 tại bệnh viện Y </Item>
-					<Item color="red">Gặp bệnh nhân X lúc 14h20 ngày 2020-28-04 tại bệnh viện Y </Item>
-					<Item color="gray">Gặp bệnh nhân X lúc 13h20 ngày 2020-28-04 tại bệnh viện Y </Item>
-					<Item color="gray">Gặp bệnh nhân X lúc 10h20 ngày 2020-28-04 tại bệnh viện Y </Item>
-					<Item color="gray">Gặp bệnh nhân X lúc 9h20 ngày 2020-28-04 tại bệnh viện Y </Item>
-				</Timeline>
+				<Timeline>{dateSource.map(mappingApm)}</Timeline>
 			</div>
 		</div>
 	);

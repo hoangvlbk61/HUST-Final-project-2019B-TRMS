@@ -23,6 +23,11 @@ const Page = ({ router, children }) => {
   const [loading, setLoading] = useState(true);
   const [state] = useAppState();
   const isNotDashboard = NonDashboardRoutes.includes(router.pathname);
+  
+  // useEffect(() => {
+  //   if(router.pathname === "/")
+  //   router.push("/record")
+  // })
 
   useEffect(() => {
     setTimeout(() => {
@@ -31,7 +36,6 @@ const Page = ({ router, children }) => {
   }, [loading]);
 
   return (
-    <Spin tip="Loading..." size="large" spinning={loading}>
       <ThemeProvider theme={theme}>
         <Container
           className={`${state.weakColor ? 'weakColor' : ''} ${
@@ -57,7 +61,6 @@ const Page = ({ router, children }) => {
           </Layout>
         </Container>
       </ThemeProvider>
-    </Spin>
   );
 };
 

@@ -6,7 +6,6 @@ import SimpleBar from "simplebar-react";
 import { Form, Input, InputNumber, Button, Modal, Switch } from "antd";
 import { FORM_MODE } from "../../const/componentConst";
 import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
-
 const FORM_NAME = {
 	REGISTER: "Thêm mới thuốc",
 	UPDATE: "Sửa thông tin thuốc",
@@ -34,9 +33,17 @@ const validateMessages = {
 	},
 };
 
-const form = ({ mode = "NONE", model, onSubmit, onCancel }) => {
+const form = ({ mode = FORM_MODE.NONE, model, onSubmit, onCancel }) => {
+	console.log("models: ", model);
+
 	const onFinish = (values) => {
 		console.log("Form Values: ", values);
+		if (mode === FORM_MODE.REGISTER) onSubmit(values);
+		else if (mode === FORM_MODE.UPDATE)
+			onSubmit({
+				...values,
+				medicationId: model.id,
+			});
 		onCancel();
 	};
 
@@ -49,16 +56,10 @@ const form = ({ mode = "NONE", model, onSubmit, onCancel }) => {
 		// console.log(e);
 	};
 
-	const handleSubmit = (formValues) => {
-		console.log("submitting ... ");
-		console.log("submitting ... ", formValues);
-		onSubmit(formValues);
-	};
-
 	return (
 		<Modal
 			title={FORM_NAME[mode]}
-			visible={mode !== FORM_MODE.NONE}
+			visible={mode !== FORM_MODE.NONE && mode !== FORM_MODE.DELETE}
 			onOk={handleOk}
 			onCancel={handleCancel}
 			destroyOnClose
@@ -72,7 +73,6 @@ const form = ({ mode = "NONE", model, onSubmit, onCancel }) => {
 				validateMessages={validateMessages}
 				initialValues={model}
 				style={{ overflow: "auto", height: "480px" }}
-				onSubmit={handleSubmit}
 			>
 				<Form.Item
 					name={"name"}
@@ -116,7 +116,7 @@ const form = ({ mode = "NONE", model, onSubmit, onCancel }) => {
 				>
 					<Input.TextArea />
 				</Form.Item>
-				<Form.Item name={"typeId"} label="Loại thuốc">
+				<Form.Item name={"medicationType"} label="Loại thuốc">
 					<Input />
 				</Form.Item>
 				<Form.Item name={"notion"} label="Lưu ý khi dùng">

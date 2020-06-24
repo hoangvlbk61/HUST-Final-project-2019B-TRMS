@@ -16,7 +16,6 @@ def paginate_data(qs, page_size, page, paginated_type, **kwargs):
 
     except EmptyPage:
         page_obj = p.page(p.num_pages)
-
     return paginated_type(
         page=page_obj.number,
         pages=p.num_pages,
@@ -62,7 +61,7 @@ def ajax_required(f):
 
 
 class AuthorRequiredMixin(View):
-    """Mixin to validate than the loggedin user is the creator of the object
+    """Mixin to validate than the logged in user is the creator of the object
     to be edited or updated."""
     def dispatch(self, request, *args, **kwargs):
         obj = self.get_object()

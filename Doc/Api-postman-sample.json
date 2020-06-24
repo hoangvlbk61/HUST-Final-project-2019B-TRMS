@@ -1,0 +1,1978 @@
+{
+	"info": {
+		"_postman_id": "e69be066-e388-4170-8954-6192b1471403",
+		"name": "TRMS - Final Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Doctor",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/graphql",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImhvYW5ndmxiazYxQGdtYWlsLmNvbSIsImV4cCI6MTU5Mjk2ODc4NCwib3JpZ0lhdCI6MTU5Mjk2ODQ4NH0.wbUXBRBhsYqaJxRXRNPduW7hBeAAt_IprpCXevLQNmo",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query { \r\n    doctorList {\r\n    id\r\n    name\r\n    position\r\n    registered\r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  createDoctor(doctorInfo : {\r\n    name: \"Doctor 16062020\"\r\n    position: \"Home doctor\"\r\n    registered: true,\r\n    userId: 2, \r\n    createdById: 2  \r\n  }) {\r\n    ok\r\n    message\r\n    __typename\r\n  }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  editDoctor(doctorId: 4, doctorInfo: {\r\n    name: \"Edited Name\",\r\n    position: \"Edited Position\"\r\n  }) {\r\n    doctor {\r\n      name\r\n      position\r\n    }\r\n    ok\r\n    message\r\n  }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  deleteDoctor(doctorId: 4) {\r\n    ok\r\n    doctor {\r\n      name\r\n      position\r\n      registered\r\n      userId\r\n    }\r\n    message\r\n  }\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Patient",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/graphql",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImhvYW5ndmxiazYxQGdtYWlsLmNvbSIsImV4cCI6MTU5Mjc0MTUxOSwib3JpZ0lhdCI6MTU5Mjc0MTIxOX0.prwv8pKi0n9Fts6nFJsmUL7kA9yP6z9qhU3VG99HUxw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n  patientList {\r\n    id\r\n    name\r\n    address\r\n    contact\r\n    ssid\r\n    gender\r\n    age\r\n    appointment {\r\n      id\r\n      time\r\n      status\r\n      address\r\n    }\r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  createPatient(patientInfo: {\r\n    name: \"First patient\"\r\n    address: \"First address\"\r\n    contact: \"091920394124\"\r\n    ssid: \"012iaksf0983\"\r\n    createdById: 2\r\n    userId: 2\r\n  }) {\r\n    ok\r\n    patient {\r\n      name\r\n      address\r\n      contact\r\n      ssid\r\n  }\r\n    message\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImhvYW5ndmxiazYxQGdtYWlsLmNvbSIsImV4cCI6MTU5Mjc0MTUxOSwib3JpZ0lhdCI6MTU5Mjc0MTIxOX0.prwv8pKi0n9Fts6nFJsmUL7kA9yP6z9qhU3VG99HUxw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  editPatient (patientId: 2, patientInfo : {\r\n    name: \"Edited first ptn PM\"\r\n    address: \"Edited address\"\r\n    ssid: \"New SSID\"\r\n    gender: \"Nam\"\r\n    age: 32\r\n  }) {\r\n    ok\r\n    patient {\r\n    name\r\n      address\r\n      contact\r\n      ssid\r\n  }\r\n    message\r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  deletePatient(patientId: 3) {\r\n    ok\r\n    patient {\r\n    name\r\n      address\r\n      contact\r\n  ssid}\r\n    message\r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Medication",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/graphql",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n  medicationList {\r\n    id\r\n    name\r\n    quantity\r\n    companyName\r\n    description\r\n    medicationGuide\r\n    medicationType\r\n    notion\r\n    isFreeBuy\r\n    isFinedMedication\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Pagination",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/graphql",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n  medicationPaginated(page: 4, pageSize: 10) {\r\n    page\r\n    pages\r\n    hasNext\r\n    hasPrev\r\n    objects {\r\n      id\r\n      name\r\n      quantity\r\n      companyName\r\n      description\r\n      medicationGuide\r\n      medicationType\r\n      notion\r\n      isFreeBuy\r\n      isFinedMedication\r\n    }\r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": " JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImhvYW5ndmxiazYxQGdtYWlsLmNvbSIsImV4cCI6MTU5MjYzODMyMCwib3JpZ0lhdCI6MTU5MjYzODAyMH0.aYHgGPuLV23pLxXrw35U-iLJyROIDsPik_LaLTgR-bg"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  createMedication(medicationInfo: {\r\n    name: \"12412412\"\r\n    quantity: 123\r\n    companyName: \"Cong ty Duoc Pham AC\"\r\n    description: \"214124\"\r\n    medicationGuide: \"124124\"\r\n    medicationType: \"Thuốc an thần\"\r\n    notion: \"Test Med notion\"\r\n    isFreeBuy: true\r\n    isFinedMedication: false\r\n    createdById: 2\r\n  }) {\r\n    ok\r\n    medication{\r\n      \r\n      name\r\n      quantity\r\n      description\r\n      companyName\r\n      medicationGuide\r\n      medicationType\r\n      createdBy\r\n      isFreeBuy\r\n      isFinedMedication\r\n  }\r\n    message\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  editMedication (medicationId: 2000,  medicationInfo: {\r\n    name: \"Edited first patient\"\r\n    quantity: 999\r\n    companyName: \"New SSID\"\r\n    description: \"Edited description\"\r\n    medicationGuide: \"Edited medication Guide\"\r\n    medicationType: \"Edited medication type\"\r\n    notion: \"edited notion\"\r\n    isFreeBuy: false\r\n    isFinedMedication: true\r\n  }) {\r\n    ok\r\n    medication{\r\n   \t\tname\r\n      quantity\r\n      companyName\r\n      description\r\n      medicationGuide\r\n      medicationType\r\n      notion\r\n      isFreeBuy\r\n      isFinedMedication\r\n  }\r\n    message\r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  deleteMedication(medicationId: 2000) {\r\n    ok\r\n    medication {\r\n      name\r\n      quantity\r\n      companyName\r\n      description\r\n      medicationGuide\r\n      medicationType\r\n      notion\r\n      isFreeBuy\r\n      isFinedMedication\r\n    }\r\n    message\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImhvYW5ndmxiazYxQGdtYWlsLmNvbSIsImV4cCI6MTU5MjY1MTMwMCwib3JpZ0lhdCI6MTU5MjY1MTAwMH0.en0lvChTd5SXWDF14nnDLTLbykAqU9PY14Eop0M-_8Q",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n  medicationDetail(id: 2000) {\r\n    id\r\n    name\r\n    quantity\r\n    companyName\r\n    description\r\n    medicationGuide\r\n    medicationType\r\n    notion\r\n    isFreeBuy\r\n    isFinedMedication\r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Appointment",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/graphql",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImhvYW5ndmxiazYxQGdtYWlsLmNvbSIsImV4cCI6MTU5MjU2MDMzOCwib3JpZ0lhdCI6MTU5MjU2MDAzOH0.w3NNli5eg_dUpgpAMwn45eqDztmOqKK3Zj4NaiCBOPg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n  appointmentList {\r\n    id\r\n    doctor {\r\n      id\r\n      name\r\n    }\r\n    patient {\r\n      name\r\n      address\r\n      ssid\r\n      contact\r\n      createdOn\r\n    }\r\n    time\r\n    address\r\n    status\r\n    \r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Doctor By Date",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/graphql",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImhvYW5ndmxiazYxQGdtYWlsLmNvbSIsImV4cCI6MTU5MjU2MDMzOCwib3JpZ0lhdCI6MTU5MjU2MDAzOH0.w3NNli5eg_dUpgpAMwn45eqDztmOqKK3Zj4NaiCBOPg"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n  appointmentListAllDoctorByDay(doctorId: 2, fromDate: \"2020-06-01\", toDate: \"2020-06-30\")\r\n  {\r\n    id\r\n    doctor {\r\n      id\r\n      name\r\n    }\r\n    patient {\r\n      name\r\n      id\r\n    }\r\n    time\r\n    address\r\n    status\r\n    \r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Patient By Date",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/graphql",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImhvYW5ndmxiazYxQGdtYWlsLmNvbSIsImV4cCI6MTU5MjU2MDMzOCwib3JpZ0lhdCI6MTU5MjU2MDAzOH0.w3NNli5eg_dUpgpAMwn45eqDztmOqKK3Zj4NaiCBOPg"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n  appointmentListAllPatientByDay(patientId: 2, fromDate: \"2020-06-01\", toDate: \"2020-06-30\")\r\n  {\r\n    id\r\n    doctor {\r\n      id\r\n      name\r\n    }\r\n    patient {\r\n      name\r\n      id\r\n    }\r\n    time\r\n    address\r\n    status\r\n    \r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List with Pagination",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "token",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImhvYW5ndmxiazYxQGdtYWlsLmNvbSIsImV4cCI6MTU5MjU2MDMzOCwib3JpZ0lhdCI6MTU5MjU2MDAzOH0.w3NNli5eg_dUpgpAMwn45eqDztmOqKK3Zj4NaiCBOPg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n\tappointmentPaginatedList( page: 1, pageSize: 2) {\r\n    page\r\n    pages\r\n    hasNext\r\n    hasPrev\r\n    objects {\r\n      id\r\n      doctor {\r\n        name\r\n        position\r\n        registered\r\n        id\r\n      }\r\n      patient {\r\n        name\r\n        address\r\n        contact\r\n        ssid\r\n      }\r\n      address\r\n      status\r\n      time\r\n    }\r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List as Doctor with Pagination",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/graphql",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n\tappointmentPaginatedDoctor(doctorId: 5, page: 1, pageSize: 2) {\r\n    page\r\n    pages\r\n    hasNext\r\n    hasPrev\r\n    objects {\r\n      id\r\n      doctor {\r\n        name\r\n        position\r\n        registered\r\n        id\r\n      }\r\n      patient {\r\n        name\r\n        address\r\n        contact\r\n        ssid\r\n      }\r\n      address\r\n      status\r\n      time\r\n    }\r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List as Patient with Pagination",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/graphql",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n\tappointmentPaginatedPatient(patientId: 2, page: 1, pageSize: 2) {\r\n    page\r\n    pages\r\n    hasNext\r\n    hasPrev\r\n    objects {\r\n      id\r\n      doctor {\r\n        name\r\n        position\r\n        registered\r\n        id\r\n      }\r\n      patient {\r\n        name\r\n        address\r\n        contact\r\n        ssid\r\n      }\r\n      address\r\n      status\r\n      time\r\n    }\r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List as Patient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/graphql",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n  appointmentListAllPatient(patientId: 2) {\r\n    id\r\n    doctor {\r\n      id\r\n      name\r\n      position\r\n      registered\r\n    }\r\n    patient {\r\n      id\r\n      name\r\n      address\r\n      ssid\r\n      contact\r\n      createdOn\r\n    }\r\n    time\r\n    address\r\n    status\r\n    \r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List as Doctor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/graphql",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImhvYW5ndmxiazYxQGdtYWlsLmNvbSIsImV4cCI6MTU5MjkzMTE0MCwib3JpZ0lhdCI6MTU5MjkzMDg0MH0.t0IqdCJAdWNVIPvcP_kblOM3v_H2agcU_9q4OztoClw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n  appointmentListAllDoctor(doctorId: 5) {\r\n    id\r\n    doctor {\r\n      id\r\n      name\r\n      position\r\n      registered\r\n    }\r\n    patient {\r\n      id\r\n      name\r\n      address\r\n      ssid\r\n      contact\r\n      createdOn\r\n    }\r\n    time\r\n    address\r\n    status\r\n    \r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  createAppointment(appointmentInfo: {\r\n    doctorId: 1\r\n    patientId: 1\r\n    time: \"2020-06-17T09:16:44.156706+00:00\"\r\n    address: \"Graphene address test\"\r\n    status: \"WAITING\"\r\n  }) {\r\n    ok\r\n    appointment {\r\n      doctorId\r\n      patientId\r\n      time\r\n      address\r\n      status\r\n      createdById\r\n    }\r\n    message\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  editAppointment(appointmentId: 3, appointmentInfo: {\r\n    doctorId: 2\r\n    patientId: 2\r\n    time: \"2020-06-17T09:16:44.156706+00:00\"\r\n    address: \"Edited Graphene address test\"\r\n    status: \"WAITING\"\r\n    createdById: 2\r\n  })\r\n  {\r\n    ok\r\n    appointment {\r\n      doctorId\r\n      patientId\r\n      time\r\n      address\r\n      status\r\n      createdById\r\n    }\r\n    message\r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  deleteAppointment(appointmentId: 3) {\r\n    ok\r\n    message\r\n    appointment {\r\n      doctorId\r\n      patientId\r\n      time\r\n      address\r\n      status\r\n      createdById\r\n    }\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n  appointmentDetail(id: 3) {\r\n    id\r\n    doctor {\r\n      id\r\n      name\r\n      position\r\n      registered\r\n    }\r\n    patient {\r\n      id\r\n      name\r\n      address\r\n      contact\r\n      ssid\r\n    }\r\n    time\r\n    address\r\n    status\r\n    createdOn\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Examination",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/graphql",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n  examinationList {\r\n    id\r\n    testcase {\r\n      id\r\n      basicTest {\r\n        id\r\n        testType\r\n        testName\r\n      }\r\n      result\r\n    }\r\n    treatment {\r\n      id\r\n      prescription {\r\n        medicationList {\r\n          medication {\r\n            id\r\n            name\r\n          }\r\n          quantity\r\n        }\r\n      }\r\n      treatmentGuide\r\n    }\r\n    time\r\n    status\r\n    preDiagnosis\r\n    impDiagnosis\r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List as Patient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/graphql",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImhvYW5ndmxiazYxQGdtYWlsLmNvbSIsImV4cCI6MTU5Mjc5ODA2Nywib3JpZ0lhdCI6MTU5Mjc5Nzc2N30.HOCeaFQDL13-MTAp5DSVUlFkEAZ7cDdPN4ZZs_t9BjY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n\texaminationListAllPatient(patientId: 1) {\r\n    id\r\n    time\r\n    status\r\n    testcase {\r\n      id\r\n      result\r\n      basicTest {\r\n        testName\r\n        testType\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List as Patient with Pagination",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/graphql",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n\texaminationPaginatedPatient(patientId: 2, page: 1, pageSize: 1) {\r\n    page\r\n    pages\r\n    hasNext\r\n    hasPrev\r\n    objects {\r\n      id\r\n      record {\r\n        id\r\n        name\r\n        address\r\n        contact\r\n        ssid\r\n      }\r\n      time\r\n      status\r\n      testcase {\r\n        id\r\n        basicTest {\r\n          testName\r\n          testType\r\n        }\r\n        result\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List with pagination",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/graphql",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n  examinationPaginatedList(page: 1, pageSize: 10) {\r\n    page\r\n    pages\r\n    hasNext\r\n    hasPrev\r\n    objects {\r\n      id\r\n      time\r\n      status\r\n      record {\r\n        id\r\n        name\r\n        address\r\n        contact\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  createExamination(examinationInfo: {\r\n    recordId: 2\r\n    time: \"2020-06-30T18:04:16+00:00\",\r\n    status: \"Suýt khám\"\r\n  }) {\r\n    ok\r\n    examination {\r\n      recordId\r\n      time\r\n      status\r\n      createdById\r\n    }\r\n    message\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  editExamination(examinationId: 2,segmentId: 3,\r\n  examinationInfo: {\r\n    treatment: {\r\n      treatmentGuide: \"HDSD\"\r\n      prescription: {\r\n        medicationList: [\r\n          {\r\n            medicationId: 1701,\r\n            quantity: 20,\r\n          },\r\n          {\r\n            medicationId: 1703,\r\n            quantity: 20,\r\n          }\r\n        ]\r\n      }\r\n    }\r\n  }) {\r\n    ok\r\n    message\r\n    examination {\r\n      testcase {\r\n        id\r\n        basicTest {\r\n          id\r\n          testName\r\n          testType\r\n        }\r\n        result\r\n      }\r\n      preDiagnosis\r\n      impDiagnosis\r\n      treatment {\r\n        prescription {\r\n          medicationList {\r\n            medication {\r\n            \tid\r\n              name\r\n            }\r\n            quantity\r\n            \r\n          }\r\n        }\r\n        treatmentGuide\r\n      }\r\n    }\r\n  }\r\n    \r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  deleteExamination(examinationId: 3) {\r\n    ok\r\n    message\r\n    examination {\r\n      recordId\r\n      time\r\n      status\r\n      createdById\r\n    }\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n\texaminationDetail(id: 1) {\r\n    id\r\n    record {\r\n      id\r\n      name\r\n      contact\r\n      address\r\n      ssid\r\n      createdOn\r\n    }\r\n    time\r\n    status\r\n    createdOn\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Treatment",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/graphql",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n  treatmentList {\r\n    id\r\n    prescription {\r\n      id\r\n      medicationList {\r\n        medication {\r\n          name\r\n          quantity\r\n          id\r\n        }\r\n        quantity\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  createTreatment(treatmentInfo: {\r\n    examinationId: 2,\r\n    treatmentGuide: \"Treatment guide test 1\"\r\n    createdById: 2\r\n  }) {\r\n    ok\r\n    treatment{\r\n      examinationId\r\n      treatmentGuide\r\n      createdById\r\n    }\r\n    message\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  editTreatment(treatmentId: 1, treatmentInfo: {\r\n  \texaminationId: 2,\r\n    treatmentGuide: \"Edited Treatment guide\"\r\n    createdById: 2\r\n  }) {\r\n    ok\r\n    message\r\n    treatment {\r\n      examinationId\r\n      treatmentGuide\r\n      createdById\r\n    }\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  deleteTreatment(treatmentId: 1) {\r\n    ok\r\n    message\r\n    treatment {\r\n      examinationId\r\n      treatmentGuide\r\n      createdById\r\n    }\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n  treatmentDetail (id: 1) {\r\n    id\r\n    examination {\r\n      id\r\n      time\r\n      status\r\n    }\r\n    treatmentGuide\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Basictest",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/graphql",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n  basictestList {\r\n    id\r\n    testName\r\n    testType\r\n    createdOn\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  createBasictest(basictestInfo: {testName: \"Xét nghiệm ctt\", testType: \"Blood test\", createdById: 2}) {\r\n    ok\r\n    message\r\n    basictest {\r\n      testName\r\n      testType\r\n      createdById\r\n    }\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  editBasictest(basictestId: 1, basictestInfo: {\r\n    testName: \"Edited Xn ctt\"\r\n    testType: \"Other test\"\r\n    createdById: 1\r\n  }) {\r\n    ok\r\n    message\r\n    basictest {\r\n      testName\r\n      testType\r\n      createdById\r\n    }\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  deleteBasictest(basictestId: 1) {\r\n    ok\r\n    message\r\n    basictest {\r\n      testName\r\n      testType\r\n      createdById\r\n    }\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n  basictestDetail(id: 1) {\r\n    id\r\n    testName\r\n    createdOn\r\n    testType\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Testcase",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/graphql",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n  testcaseList {\r\n    id\r\n    examination {\r\n      id\r\n    }\r\n    basicTest {\r\n      id\r\n      testName\r\n      testType\r\n    }\r\n    result\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n\tcreateTestcase(testcaseInfo: {\r\n    examinationId: 2\r\n    basicTestId: 1\r\n    result: \"OK\"\r\n    createdById: 2\r\n  }) {\r\n    ok\r\n    message\r\n    testcase {\r\n      basicTestId\r\n      result\r\n    }\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n\teditTestcase(testcaseId: 1 ,testcaseInfo: {\r\n    examinationId: 2\r\n    basicTestId: 4\r\n    result: \"Edited OK\"\r\n    createdById: 2\r\n  }) {\r\n    ok\r\n    message\r\n    testcase {\r\n      basicTestId\r\n      result\r\n    }\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  deleteTestcase(testcaseId: 1) {\r\n    ok\r\n    message\r\n    testcase {\r\n      examinationId\r\n      basicTestId\r\n      createdById\r\n      result\r\n    }\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n  testcaseDetail(id: 1) {\r\n    id\r\n    examination {\r\n      id\r\n    }\r\n    basicTest {\r\n      id\r\n      testName\r\n      testType\r\n    }\r\n    result\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Auth",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/graphql",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "mutation {\r\n  tokenAuth(email: \"hoangvlbk61@gmail.com\", password: \"Lehoang606\") {\r\n    token\r\n  }\r\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "VerifyToken",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/graphql",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n\tverifyToken(token: \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImhvYW5ndmxiazYxQGdtYWlsLmNvbSIsImV4cCI6MTU5MjQ5MDQ0Mywib3JpZ0lhdCI6MTU5MjQ5MDE0M30.DbuBbaeVJMQVFgB226pQSTZrv2O1Gizui2DTqg_-rIA\")\r\n  {\r\n    payload\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RefreshToken",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/graphql",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n\trefreshToken(token: \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImhvYW5ndmxiazYxQGdtYWlsLmNvbSIsImV4cCI6MTU5MjQ3MDYzMSwib3JpZ0lhdCI6MTU5MjQ3MDMzMX0.AQDGJvpI3skmRgICQHfZiuoacWFvbbdyE2bW-qlXfIo\")\r\n  {\r\n    refreshExpiresIn\r\n    token\r\n    payload\r\n  }\r\n}\r\n",
+								"variables": ""
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

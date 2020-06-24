@@ -2,93 +2,85 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Card, Modal } from "antd";
+import { Card, Modal, message, Spin } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { useQuery, useMutation } from "@apollo/react-hooks";
+
 import { DataTableFrame } from "../styles/DataTable";
 import MedicationForm from "./form";
 import { FORM_MODE } from "../../const/componentConst";
 import InforTable from "./infoTable";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
-
+import { FETCH_ALL, CREATE, UPDATE, DELETE } from "../../const/gql/medication";
 const { confirm } = Modal;
-const dataSource = [
-	{
-		key: "1",
-		name: "Thuốc an thân 1",
-		quantity: 32142,
-		companyName: "Cong ty dược 1",
-		description: "Mô tả thuốc 1",
-		medicationGuide: "uống sau bữa sáng",
-		typeId: "Thuốc an thần",
-		notion:
-			"Không sử dụng cho trẻ em dưới 6 tuổi, phụ nữ có thai hoặc cho con bú",
-		isFreeBuy: true,
-		isFinedMedication: false,
-	},
-	{
-		key: "2",
-		name: "Thuốc an thân 2",
-		quantity: 3224,
-		companyName: "Công ty dược 2",
-		description: "Mô tả thuốc 2",
-		medicationGuide: "Uống sau bữa ăn",
-		typeId: "Thuốc an thần",
-		notion:
-			"Không sử dụng cho trẻ em dưới 6 tuổi, phụ nữ có thai hoặc cho con bú",
-		isFreeBuy: true,
-		isFinedMedication: false,
-	},
-	{
-		key: "3",
-		name: "Thuốc an thân 3",
-		quantity: 32122,
-		companyName: "Dược HP",
-		description: "Mô tả thuốc 3",
-		medicationGuide: "Uống sau bữa tối ",
-		typeId: "Thuốc an thần",
-		notion:
-			"Không sử dụng cho trẻ em dưới 6 tuổi, phụ nữ có thai hoặc cho con bú",
-		isFreeBuy: true,
-		isFinedMedication: false,
-	},
-	{
-		key: "4",
-		name: "Thuốc an thân 4",
-		quantity: 32412,
-		companyName: "Dược Yn",
-		description: "Mô tả thuốc 4",
-		medicationGuide: "UỐng khi đau bụng",
-		typeId: "Thuốc an thần",
-		notion:
-			"Không sử dụng cho trẻ em dưới 6 tuổi, phụ nữ có thai hoặc cho con bú",
-		isFreeBuy: true,
-		isFinedMedication: false,
-	},
-];
 
 const defaultModel = {
+	companyName: "",
+	description: "",
+	isFinedMedication: false,
+	isFreeBuy: true,
+	medicationGuide: "",
+	medicationType: "",
 	name: "",
-	age: "",
-	gender: "",
-	occupation: "",
-	address: "",
-	infomation: "",
+	notion: "",
+	quantity: 0,
 };
 
-function MedicationManagement({
-	medicationCreate,
-	medicationDelete,
-	medicationDetail,
-	medicationFetch,
-	medicationUpdate,
-}) {
+function MedicationManagement() {
 	const [formMode, setFormMode] = useState(FORM_MODE.NONE);
 	const [model, setModel] = useState(defaultModel);
+	const [
+		createMedication,
+		{ loading: createLoading, error: createError },
+	] = useMutation(CREATE);
+	const [
+		updateMedication,
+		{ loading: updateLoading, error: updateError },
+	] = useMutation(UPDATE);
+	const [
+		deleteMedication,
+		{ loading: deleteLoading, error: deleteError },
+	] = useMutation(DELETE);
 
-	// useEffect(() => {
-	// 	medicationFetch();
-	// }, [medicationFetch]);
+	const {
+		data = {},
+		error: fetchingError,
+		loading: fetchingLoading,
+		refetch,
+	} = useQuery(FETCH_ALL, {
+		variables: {},
+		fetchPolicy: "no-cache",
+		notifyOnNetworkStatusChange: true,
+	});
+	useEffect(() => {
+		let fetchErr = fetchingError ? `${fetchingError.message}` : null;
+		let createErr = createError ? `${createError.message}` : null;
+		let updateErr = updateError ? `${updateError.message}` : null;
+		let deleteErr = deleteError ? `${deleteError.message}` : null;
 
-	const showDeleteModal = () => {
+		if (fetchErr) {
+			message.error(fetchErr);
+			fetchErr = null;
+		}
+		if (createErr) {
+			message.error(createErr);
+			createErr = null;
+		}
+		if (updateErr) {
+			message.error(updateErr);
+			updateErr = null;
+		}
+		if (deleteErr) {
+			message.error(deleteErr);
+			deleteErr = null;
+		}
+	}, [createError, fetchingError, updateError, deleteError]);
+
+	const dataSource = ((data && data.medicationList) || []).map((e) => ({
+		...e,
+		key: e.id,
+	}));
+
+	const showDeleteModal = (record) => {
 		confirm({
 			title: "Xác nhận?",
 			icon: <ExclamationCircleOutlined />,
@@ -97,8 +89,13 @@ function MedicationManagement({
 			okType: "danger",
 			cancelText: "Hủy",
 			onOk() {
-				medicationDelete(model.id);
-				console.log("OK");
+				deleteMedication({
+					variables: { medicationId: record.id },
+					update: (proxy, mutationResult) => {
+						message.success("Xóa thuốc thành công!");
+						refetch();
+					},
+				});
 			},
 			onCancel() {
 				console.log("Cancel");
@@ -116,50 +113,69 @@ function MedicationManagement({
 		setFormMode(FORM_MODE.REGISTER);
 	};
 	const showUpdateForm = (record) => {
-		console.log("click Edit ");
-
 		setFormMode(FORM_MODE.UPDATE);
 		setModel(record);
 	};
 	const showDeleteForm = (record) => {
-		console.log("LOGGGGGGGGGGG: ", record);
-		showDeleteModal();
-		// setFormMode(FORM_MODE.DELETE);
-		// setModel(record);
+		showDeleteModal(record);
 	};
 
 	const handleSubmit = (formValues) => {
 		// process formValues
 		switch (formMode) {
 			case FORM_MODE.REGISTER:
-				medicationCreate(formValues);
+				createMedication({
+					variables: { medicationInfo: formValues },
+					update: (proxy, mutationResult) => {
+						message.success("Thêm mới thuốc thành công!");
+						refetch();
+					},
+				});
 				break;
 			case FORM_MODE.UPDATE:
-				medicationUpdate(formValues);
+				updateMedication({
+					variables: {
+						medicationId: formValues.medicationId,
+						medicationInfo: {
+							...formValues,
+							medicationId: undefined,
+						},
+					},
+					update: (proxy, mutationResult) => {
+						message.success("Sửa thuốc thành công!");
+						refetch();
+					},
+				});
 				break;
 			default:
 				break;
 		}
 	};
 	return (
-		<Card
-			title="Quản lý bệnh nhân"
-			extra={<a onClick={() => showRegisterForm()}>Thêm</a>}
+		<Spin
+			tip="Loading..."
+			size="large"
+			spinning={createLoading || fetchingLoading}
 		>
-			<MedicationForm
-				mode={formMode}
-				model={model}
-				onCancel={hideForm}
-				onSubmit={handleSubmit}
-			/>
-			<DataTableFrame>
-				<InforTable
-					showEditAction={showUpdateForm}
-					showDeleteAction={showDeleteForm}
-					dataSource={dataSource}
+			<Card
+				title="Quản lý thuốc"
+				extra={<a onClick={() => showRegisterForm()}>Thêm</a>}
+			>
+				<MedicationForm
+					mode={formMode}
+					model={model}
+					onCancel={hideForm}
+					onSubmit={handleSubmit}
 				/>
-			</DataTableFrame>
-		</Card>
+				<DataTableFrame>
+					<InforTable
+						showEditAction={showUpdateForm}
+						showDeleteAction={showDeleteForm}
+						dataSource={dataSource}
+					/>
+				</DataTableFrame>
+			</Card>
+		</Spin>
 	);
 }
 

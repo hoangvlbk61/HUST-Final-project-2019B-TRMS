@@ -1,88 +1,64 @@
 /** @format */
 
-import React, { useState, useCallback } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import SimpleBar from "simplebar-react";
-import { Form, Input, InputNumber, Button, Modal, Steps, Divider } from "antd";
+import { Form, Input, InputNumber, Button, Modal, Select } from "antd";
 import { FORM_MODE } from "../../const/componentConst";
-import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
-import InputPanel from "../shared/InputPanel";
-//css
-import "./style.less";
-const { Step } = Steps;
+import "./formStyle.less";
 
 const FORM_NAME = {
-	REGISTER: "Khám mới",
-	UPDATE: "Sửa thông tin khám bệnh",
-	DELETE: "Xóa thông tin khám bệnh",
-	DETAIL: "Thông tin khám bệnh chi tiết",
+	REGISTER: "Thêm mới bệnh nhân",
+	UPDATE: "Sửa thông tin bệnh nhân",
+	DELETE: "Xóa bệnh nhân",
+	DETAIL: "Thông tin bệnh nhân",
 	NONE: "",
 };
-const DIAGNOSE_STEP = [
-	{
-		title: "Khám sơ bộ và xét nghiệm",
-		content: "First-content",
-	},
-	{
-		title: "Chẩn đoán",
-		content: "Second-content",
-	},
-	{
-		title: "Điều trị",
-		content: "Last-content",
-	},
-];
+
 const layout = {
 	labelCol: {
-		span: 6,
+		span: 8,
 	},
 	wrapperCol: {
-		span: 14,
+		span: 16,
 	},
 };
 const validateMessages = {
-	required: "${label} cần được điền!",
+	required: "${label} không được để trống!",
 	types: {
-		email: "${label} không phải email hợp lệ!",
-		number: "${label} không phải số hợp lệ!",
+		email: "${label} không là email hợp lệ!",
+		number: "${label} không là số hợp lệ!",
 	},
 	number: {
-		range: "${label} phải nằm trong khoản ${min} và ${max}",
+		range: "${label} phải nằm trong khoảng ${min} và ${max}",
 	},
 };
 
 const form = ({ mode = "NONE", model, onSubmit, onCancel }) => {
-	const [currentStepOfDiagnose, setCurrentStepOfDiagnose] = useState(0);
+	console.log("modelmodel: ", model);
+
 	const onFinish = (values) => {
-		console.log("Form Values: ", values);
+		if (mode === FORM_MODE.REGISTER)
+			onSubmit({
+				...values,
+				ssid: values.ssid.toString(),
+			});
+		else if (mode === FORM_MODE.UPDATE)
+			onSubmit({
+				...values,
+				ssid: values.ssid.toString(),
+				patientId: parseInt(model.id),
+			});
+
 		onCancel();
 	};
-	const handleClickNextBtn = useCallback(() => {
-		console.log("Next current: ", currentStepOfDiagnose);
 
-		if (currentStepOfDiagnose < 2)
-			setCurrentStepOfDiagnose(currentStepOfDiagnose + 1);
-	});
-	const handleClickPrevBtn = useCallback(() => {
-		console.log("Prev current: ", currentStepOfDiagnose);
-		if (currentStepOfDiagnose > 0)
-			setCurrentStepOfDiagnose(currentStepOfDiagnose - 1);
-	});
 	const handleOk = (e) => {
 		// console.log(e);
 	};
 
 	const handleCancel = (e) => {
 		onCancel();
-		// console.log(e);
 	};
-
-	const handleSubmit = (formValues) => {
-		console.log("submitting ... ");
-		console.log("submitting ... ", formValues);
-		onSubmit(formValues);
-	};
-
 	return (
 		<Modal
 			title={FORM_NAME[mode]}
@@ -91,297 +67,82 @@ const form = ({ mode = "NONE", model, onSubmit, onCancel }) => {
 			onCancel={handleCancel}
 			destroyOnClose
 			footer={null}
-			width={600}
+			className
 		>
-			<div className="step-area">
-				<Steps current={currentStepOfDiagnose}>
-					{DIAGNOSE_STEP.map((item) => (
-						<Step key={item.title} title={item.title} />
-					))}
-				</Steps>
-			</div>
-			<div>
-				{currentStepOfDiagnose === 0 && (
-					<>
-						<div className="treatment-step-title">
-							<Divider>Khám sơ bộ</Divider>
-						</div>
-						<InputPanel
-							title="Xét nghiệm máu"
-							childlist={[
-								{
-									name: "blood",
-									content: "Công thức máu",
-									type: "input",
-								},
-								{
-									name: "blood2",
-									content: "Chức năng thận",
-									type: "input",
-								},
-								{
-									name: "blood3",
-									content: "Chức năng gan",
-									type: "input",
-								},
-								{
-									name: "blood4",
-									content: "Mỡ máu",
-									type: "input",
-								},
-								{
-									name: "blood5",
-									content: "Viêm gan ",
-									type: "input",
-								},
-								{
-									name: "blood6",
-									content: "Điện giải đồ",
-									type: "input",
-								},
-							]}
-						/>
-						<InputPanel
-							title="Xét nghiệm khác"
-							childlist={[
-								{
-									name: "blood",
-									content: "Nước tiểu",
-									type: "input",
-								},
-								{
-									name: "blood2",
-									content: "X quang tim phổi",
-									type: "input",
-								},
-								{
-									name: "blood3",
-									content: "Siêu âm ổ bụng",
-									type: "input",
-								},
-								{
-									name: "blood4",
-									content: "Siêu âm tuyến giáp",
-									type: "input",
-								},
-								{
-									name: "blood5",
-									content: "Điện tim đồ",
-									type: "input",
-								},
-								{
-									name: "blood6",
-									content: "Hóc môn",
-									type: "input",
-								},
-								{
-									name: "blood7",
-									content: "Ung thư sớm",
-									type: "input",
-								},
-								{
-									name: "blood8",
-									content: "Vô sinh",
-									type: "input",
-								},
-							]}
-						/>
-						{/* <div className="form-block-2">
-							<Form.Item
-								name={"name"}
-								label="Mạch"
-								rules={[
-									{
-										required: true,
-									},
-								]}
-							>
-								<InputNumber style={{ width: "100%" }} />
-							</Form.Item>
-							<Form.Item
-								name={"quantity"}
-								label="Huyết áp"
-								rules={[
-									{
-										required: true,
-									},
-								]}
-							>
-								<InputNumber style={{ width: "100%" }} />
-							</Form.Item>
-						</div>
-						<div className="form-block-2">
-							<Form.Item
-								name={"companyName"}
-								label="Nhiệt độ"
-								rules={[
-									{
-										required: true,
-									},
-								]}
-							>
-								<InputNumber style={{ width: "100%" }} />
-							</Form.Item>
-							<Form.Item name={"description"} label="Nhịp thở">
-								<InputNumber style={{ width: "100%" }} />
-							</Form.Item>
-						</div> */}
-						{/* <div className="treatment-step-title">
-							<Divider>Xét nghiệm</Divider>
-						</div>
-						<div className="form-block-full">
-							<Form.Item name={"medicationGuide"} label="Máu">
-								<Input.TextArea />
-							</Form.Item>
-							<Form.Item
-								name={"medicationGuide2"}
-								label="Nước tiểu"
-							>
-								<Input.TextArea />
-							</Form.Item>
-							<Form.Item name={"notion"} label="Chụp">
-								<Input.TextArea />
-							</Form.Item>
-						</div> */}
-					</>
-				)}
-				{currentStepOfDiagnose === 1 && (
-					<div style={{ height: "400px" }}>
-						<InputPanel
-							title="Xét nghiệm khác"
-							childlist={[
-								{
-									name: "blood",
-									content: "Nước tiểu",
-									type: "input",
-								},
-								{
-									name: "blood2",
-									content: "X quang tim phổi",
-									type: "input",
-								},
-								{
-									name: "blood3",
-									content: "Siêu âm ổ bụng",
-									type: "input",
-								},
-								{
-									name: "blood4",
-									content: "Siêu âm tuyến giáp",
-									type: "input",
-								},
-								{
-									name: "blood5",
-									content: "Điện tim đồ",
-									type: "input",
-								},
-								{
-									name: "blood6",
-									content: "Hóc môn",
-									type: "input",
-								},
-								{
-									name: "blood7",
-									content: "Ung thư sớm",
-									type: "input",
-								},
-								{
-									name: "blood8",
-									content: "Vô sinh",
-									type: "input",
-								},
-							]}
-						/>
-					</div>
-				)}
-				{currentStepOfDiagnose === 2 && (
-					<div style={{ height: "400px" }}>
-						<InputPanel
-							title="Thuốc"
-							childlist={[
-								{
-									name: "med1",
-									content: "Penicillin",
-									type: "number",
-								},
-								{
-									name: "med2",
-									content: "Kháng sinh",
-									type: "number",
-								},
-								{
-									name: "med3",
-									content: "Giảm đau",
-									type: "number",
-								},
-								{
-									name: "med4",
-									content: "Panacetamol",
-									type: "number",
-								},
-								{
-									name: "med5",
-									content: "Vitamin C",
-									type: "number",
-								},
-								{
-									name: "med6",
-									content: "Vitamin B",
-									type: "number",
-								},
-								{
-									name: "med7",
-									content: "Vitamin A",
-									type: "number",
-								},
-								{
-									name: "med8",
-									content: "Vitamin B1",
-									type: "number",
-								},
-							]}
-						/>
-						<div>
-							<div style={{}}> Điều trị </div>
-							<textarea width={300} />
-						</div>
-					</div>
-				)}
-
-				<div className="footer-button-area">
-					{currentStepOfDiagnose !== 0 && (
-						<Button
-							type="primary"
-							icon={<ArrowLeftOutlined className="button-icon" />}
-							className="button-action"
-							onClick={handleClickPrevBtn}
-						>
+			<Form
+				{...layout}
+				name="nest-messages"
+				onFinish={onFinish}
+				validateMessages={validateMessages}
+				initialValues={{ ...model, ssid: parseInt(model.ssid) }}
+				className={"form-input"}
+			>
+				<Form.Item
+					name={"name"}
+					label="Tên"
+					rules={[
+						{
+							required: true,
+						},
+					]}
+				>
+					<Input />
+				</Form.Item>
+				<Form.Item name={"gender"} label="Giới tính">
+					<Select>
+						<Select.Option value="Nam" key="male">
 							{" "}
-							Prev{" "}
-						</Button>
-					)}
-					{currentStepOfDiagnose !== 2 && (
-						<Button
-							type="primary"
-							icon={
-								<ArrowRightOutlined className="button-icon" />
-							}
-							className="button-action"
-							onClick={handleClickNextBtn}
-						>
+							Nam{" "}
+						</Select.Option>
+						<Select.Option value="Nữ" key="femail">
 							{" "}
-							Next{" "}
-						</Button>
-					)}
-				</div>
-				{/* <div>
-					<Form.Item>
-						<Button type="primary" htmlType="submit" block>
-							Lưu
-						</Button>
-					</Form.Item>
-				</div> */}
-			</div>
+							Nữ{" "}
+						</Select.Option>
+						<Select.Option value="Khác" key="ohter">
+							{" "}
+							Khác{" "}
+						</Select.Option>
+					</Select>
+				</Form.Item>
+				<Form.Item
+					name={"ssid"}
+					label="CMT / CCCD"
+					rules={[
+						{
+							required: true,
+							type: "number",
+							min: 0,
+							max: 999999999999,
+						},
+					]}
+				>
+					<InputNumber />
+				</Form.Item>
+				<Form.Item
+					name={"age"}
+					label="Tuổi"
+					rules={[
+						{
+							type: "number",
+							min: 0,
+							max: 160,
+						},
+					]}
+				>
+					<InputNumber />
+				</Form.Item>
+				<Form.Item name={"address"} label="Địa chỉ">
+					<Input />
+				</Form.Item>
+				<Form.Item name={"contact"} label="Liên lạc người thân">
+					<Input.TextArea />
+				</Form.Item>
+				<Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+					<Button type="primary" htmlType="submit">
+						Lưu
+					</Button>
+				</Form.Item>
+			</Form>
 		</Modal>
 	);
 };

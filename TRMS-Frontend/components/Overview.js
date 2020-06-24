@@ -281,7 +281,7 @@ const Overview = () => {
                   <List.Item.Meta
                     title={
                       <a
-                        href="javascript:;"
+                        href=""
                         className="px-4"
                         css={`
                           display: flex;

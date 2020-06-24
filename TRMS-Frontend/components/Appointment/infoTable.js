@@ -3,7 +3,9 @@
 import { Table, Button } from "antd";
 import PropTypes from "prop-types";
 import { Trash, Edit } from "react-feather";
+import { APPOINTMENT_STATUS } from "../../const/componentConst";
 import "../styles/tableStyle.less";
+import moment from "moment";
 
 const defaultIconSize = 20;
 const defaultIconColor = "white";
@@ -23,18 +25,23 @@ const InfoTable = ({ showEditAction, showDeleteAction, dataSource }) => {
 			columns={[
 				{
 					title: "Bác sĩ",
-					dataIndex: "doctorId",
-					key: "doctorId",
+					// dataIndex: "doctorId",
+					key: "doctor",
+					render: (text, record) => record.doctor.name,
 				},
 				{
 					title: "Bệnh nhân",
-					dataIndex: "patientId",
-					key: "patientId",
+					dataIndex: "patient",
+					key: "patient",
+					render: (text, record) => record.patient.name,
 				},
 				{
 					title: "Thời gian hẹn",
 					dataIndex: "time",
 					key: "time",
+					render: (text) => {
+						return moment(text).locale("vi").fromNow();
+					},
 				},
 				{
 					title: "Địa chỉ",
@@ -45,11 +52,7 @@ const InfoTable = ({ showEditAction, showDeleteAction, dataSource }) => {
 					title: "Trạng thái",
 					dataIndex: "status",
 					key: "status",
-				},
-				{
-					title: "Điều trị",
-					dataIndex: "treatmentId",
-					key: "treatmentId",
+					render: (text) => APPOINTMENT_STATUS[text],
 				},
 				{
 					title: "Thao tác",

@@ -1,8 +1,8 @@
 /** @format */
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Card, Modal, Button } from "antd";
+import { Card, Modal, Button, Spin, message } from "antd";
 import { DataTableFrame } from "../styles/DataTable";
 import AppointmentForm from "./form";
 import { FORM_MODE } from "../../const/componentConst";
@@ -15,41 +15,16 @@ import {
 import CalendarGrid from "./calendarGrid";
 // CSS
 import "./style.less";
+import { useQuery, useMutation } from "@apollo/react-hooks";
+import { CALENDAR_MODE } from "./const";
+import {
+	FETCH_ALL_AS_DOCTOR,
+	FETCH_ALL_AS_DOCTOR_BY_DAY,
+	DELETE,
+} from "../../const/gql/appointment";
+import moment from "moment";
 
-import {CALENDAR_MODE} from "./const";
 const { confirm } = Modal;
-const dataSource = [
-	{
-		key: "1",
-		id: "",
-		doctorId: 32142,
-		patientId: 32142,
-		time: 1587313683907,
-		address: "Phòng 502 Nhà B BV Đa Khoa Thái Nguyên",
-		status: 0,
-		treatmentId: 102948,
-	},
-	{
-		key: "2",
-		id: "",
-		doctorId: 32142,
-		patientId: 32142,
-		time: 1587313683907,
-		address: "Phòng 503 Nhà B BV Đa Khoa Thái Nguyên",
-		status: 1,
-		treatmentId: 221424221,
-	},
-	{
-		key: "3",
-		id: "",
-		doctorId: 32142,
-		patientId: 32142,
-		time: 1587313683907,
-		address: "Phòng 504 Nhà B BV Đa Khoa Thái Nguyên",
-		status: 2,
-		treatmentId: 12314212,
-	},
-];
 
 const defaultModel = {
 	id: "",
@@ -61,8 +36,6 @@ const defaultModel = {
 	treatmentId: "",
 };
 
-
-
 function AppointmentManagement({
 	appointmentCreate,
 	appointmentDelete,
@@ -72,18 +45,72 @@ function AppointmentManagement({
 }) {
 	const [model, setModel] = useState(defaultModel);
 	const [formMode, setFormMode] = useState(FORM_MODE.NONE);
-	const [calendarMode, setCalendarMode ] = useState(CALENDAR_MODE.LIST);
-	console.log("mode : ", calendarMode);
-	
-	const handleChangeMode = useCallback((mode) => { 
-		setCalendarMode(mode);
-	}, [calendarMode]);
+	const [calendarMode, setCalendarMode] = useState(CALENDAR_MODE.LIST);
+	const [dayPicker, setDayPicker] = useState(
+		moment().locale("vi").format("YYYY-MM-DD")
+	);
 
-	// useEffect(() => {
-	// 	appointmentFetch();
-	// }, [appointmentFetch]);
+	const [
+		deleteAppointment,
+		{ loading: deleteLoading, error: deleteError },
+	] = useMutation(DELETE);
 
-	const showDeleteModal = () => {
+	const handleChangeMode = useCallback(
+		(mode) => {
+			setCalendarMode(mode);
+		},
+		[calendarMode]
+	);
+
+	const user =
+		typeof localStorage == "undefined"
+			? { doctors: { id: 0 } }
+			: JSON.parse(localStorage.getItem("user"));
+
+	const {
+		data = { appointmentListAllDoctor: [] },
+		error: fetchingError,
+		loading,
+		refetch,
+	} = useQuery(FETCH_ALL_AS_DOCTOR, {
+		variables: {
+			doctorId: user.doctors.id,
+		},
+		fetchPolicy: "no-cache",
+		notifyOnNetworkStatusChange: true,
+	});
+
+	const {
+		data: appointmentListDoctorByDayData = {
+			appointmentListAllDoctorByDay: [],
+		},
+		error: fetchingAllDoctorByDayError,
+		loading: loadingAllDoctorByDay,
+		refetch: refetchByDay,
+	} = useQuery(FETCH_ALL_AS_DOCTOR_BY_DAY, {
+		variables: {
+			doctorId: user.doctors.id,
+			fromDate: moment(dayPicker).startOf("day").format("YYYY-MM-DD"),
+			toDate: moment(dayPicker)
+				.add(1, "days")
+				.startOf("day")
+				.format("YYYY-MM-DD"),
+		},
+		fetchPolicy: "no-cache",
+		notifyOnNetworkStatusChange: true,
+	});
+
+	useEffect(() => {
+		refetchByDay();
+	}, [dayPicker]);
+
+	const dataSource = data.appointmentListAllDoctor.map((e) => ({
+		...e,
+		key: e.id,
+	}));
+
+	const showDeleteModal = (apm) => {
+		
 		confirm({
 			title: "Xác nhận?",
 			icon: <ExclamationCircleOutlined />,
@@ -92,8 +119,27 @@ function AppointmentManagement({
 			okType: "danger",
 			cancelText: "Hủy",
 			onOk() {
-				appointmentDelete(model.id);
-				console.log("OK");
+				deleteAppointment({
+					variables: { appointmentId: parseInt(apm.id) },
+					update: (proxy, mutationResult) => {
+						if (
+							mutationResult.data.createAppointment &&
+							mutationResult.data.createAppointment.ok
+						) {
+							message.success(
+								`Xóa cuộc hẹn lúc ${moment(apm.time)
+									.locale("vi")
+									.format("HH:MM")} ngày ${moment(apm.time)
+									.locale("vi")
+									.format("YYYY-MM-DD")} thành công!`
+							);
+						} else {
+							message.error(mutationResult.errors[0].message);
+						}
+						refetch();
+						refetchByDay();
+					},
+				});
 			},
 			onCancel() {
 				console.log("Cancel");
@@ -117,8 +163,7 @@ function AppointmentManagement({
 		setModel(record);
 	};
 	const showDeleteForm = (record) => {
-		console.log("LOGGGGGGGGGGG: ", record);
-		showDeleteModal();
+		showDeleteModal(record);
 		// setFormMode(FORM_MODE.DELETE);
 		// setModel(record);
 	};
@@ -137,49 +182,76 @@ function AppointmentManagement({
 		}
 	};
 	return (
-		<Card
-			title={
-				<div className="card-title">
-					Quản lý cuộc hẹn
-					<div className="icon-area">
-						<Button
-							type={calendarMode === CALENDAR_MODE.LIST ? "primary" : "default"}
-							shape="round"
-							icon={
-								<UnorderedListOutlined className="icon-btn" />
-							}
-							className="button-action"
-							onClick={() => handleChangeMode(CALENDAR_MODE.LIST)}
-						/>
-						<Button
-							type={calendarMode === CALENDAR_MODE.GRID ? "primary" : "default"}
-							shape="round"
-							icon={<CalendarOutlined className="icon-btn" />}
-							className="button-action"
-							onClick={() => handleChangeMode(CALENDAR_MODE.GRID)}
-						/>
-					</div>
-				</div>
-			}
-			extra={<a onClick={() => showRegisterForm()}>Thêm</a>}
+		<Spin
+			tip="Loading..."
+			size="large"
+			spinning={loading || loadingAllDoctorByDay || deleteLoading}
 		>
-			<AppointmentForm
-				mode={formMode}
-				model={model}
-				onCancel={hideForm}
-				onSubmit={handleSubmit}
-			/>
-			<DataTableFrame>
-				{calendarMode === CALENDAR_MODE.LIST && <InforTable
-					showEditAction={showUpdateForm}
-					showDeleteAction={showDeleteForm}
-					dataSource={dataSource}
-				/>}
-				{
-					calendarMode === CALENDAR_MODE.GRID && <CalendarGrid />
+			<Card
+				title={
+					<div className="card-title">
+						Quản lý cuộc hẹn
+						<div className="icon-area">
+							<Button
+								type={
+									calendarMode === CALENDAR_MODE.LIST
+										? "primary"
+										: "default"
+								}
+								shape="round"
+								icon={
+									<UnorderedListOutlined className="icon-btn" />
+								}
+								className="button-action"
+								onClick={() =>
+									handleChangeMode(CALENDAR_MODE.LIST)
+								}
+							/>
+							<Button
+								type={
+									calendarMode === CALENDAR_MODE.GRID
+										? "primary"
+										: "default"
+								}
+								shape="round"
+								icon={<CalendarOutlined className="icon-btn" />}
+								className="button-action"
+								onClick={() =>
+									handleChangeMode(CALENDAR_MODE.GRID)
+								}
+							/>
+						</div>
+					</div>
 				}
-			</DataTableFrame>
-		</Card>
+				extra={<a onClick={() => showRegisterForm()}>Thêm</a>}
+			>
+				<AppointmentForm
+					mode={formMode}
+					model={model}
+					onCancel={hideForm}
+					onSubmit={handleSubmit}
+					refetch={refetch}
+					refetchByDay={refetchByDay}
+				/>
+				<DataTableFrame>
+					{calendarMode === CALENDAR_MODE.LIST && (
+						<InforTable
+							showEditAction={showUpdateForm}
+							showDeleteAction={showDeleteForm}
+							dataSource={dataSource}
+						/>
+					)}
+					{calendarMode === CALENDAR_MODE.GRID && (
+						<CalendarGrid
+							onChangeDayPicker={setDayPicker}
+							appointmentList={
+								appointmentListDoctorByDayData.appointmentListAllDoctorByDay
+							}
+						/>
+					)}
+				</DataTableFrame>
+			</Card>
+		</Spin>
 	);
 }
 

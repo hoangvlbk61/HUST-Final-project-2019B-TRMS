@@ -33,21 +33,19 @@ const validateMessages = {
 		range: "${label} phải nằm trong khoản ${min} và ${max}",
 	},
 };
-const InputPanel = ({ title, childlist }) => {
-	const [optionList, setOptionList] = useState(
-		childlist.map((e) => ({ name: e.name, content: e.content, value: "" }))
-	);
-	const [inputList, setInputList] = useState([]);
+const InputPanel = ({ title, childlist, onChange, initialValues }) => {
 
-	const onFinish = (values) => {
-		console.log("Form Values: ", values);
-		onCancel();
-	};
-	const handleSubmit = (formValues) => {
-		console.log("submitting ... ");
-		console.log("submitting ... ", formValues);
-		onSubmit(formValues);
-	};
+	const optionList = childlist.map((e) => ({
+		name: e.name,
+		content: e.content,
+		value: "",
+		type: e.type,
+	}));
+
+	const [inputList, setInputList] = useState(
+		initialValues ? initialValues : []
+	);
+	
 	const handleAddElm = () => {
 		if (inputList.length < optionList.length)
 			setInputList(
@@ -61,51 +59,55 @@ const InputPanel = ({ title, childlist }) => {
 	};
 
 	const handleRemoveElm = (indx) => {
-		setInputList([
+		const newInpElms = [
 			...inputList.slice(0, indx),
 			...inputList.slice(indx + 1),
-		]);
+		];
+		setInputList(newInpElms);
+		if (typeof onChange === "function") {
+			onChange(newInpElms);
+		}
 	};
 
 	const onChooseType = (type, indx) => {
 		const newElements = { ...inputList[indx], name: type };
-		setInputList([
+		const newInpElms = [
 			...inputList.slice(0, indx),
 			newElements,
 			...inputList.slice(indx + 1),
-		]);
+		];
+		setInputList(newInpElms);
+		if (typeof onChange === "function") {
+			onChange(newInpElms);
+		}
 	};
 
 	const onChangeValue = (value, indx) => {
 		const newElements = { ...inputList[indx], value };
-		setInputList(
-			[
-				...inputList.slice(0, indx),
-				newElements,
-				...inputList.slice(indx + 1),
-			].map((e, idx) => ({ ...e, key: idx }))
-		);
+		const newInpElms = [
+			...inputList.slice(0, indx),
+			newElements,
+			...inputList.slice(indx + 1),
+		].map((e, idx) => ({ ...e, key: idx }));
+		setInputList(newInpElms);
+		if (typeof onChange === "function") {
+			onChange(newInpElms);
+		}
 	};
-
 	return (
 		<Form
 			{...layout}
 			name="nest-messages"
-			onFinish={onFinish}
 			validateMessages={validateMessages}
 			// initialValues={model}
 			style={{ overflow: "auto", height: "480px" }}
-			onSubmit={handleSubmit}
 			className="input-panel-in-form"
 			style={{
 				display: "flex",
 				flexDirection: "row",
 				flexWrap: "wrap",
-				/* Or do it all in one line
-      with flex flow */
 				flexFlow: "row wrap",
 			}}
-			// layout={"vertical"}
 		>
 			<div
 				style={{

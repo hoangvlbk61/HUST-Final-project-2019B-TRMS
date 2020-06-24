@@ -1,7 +1,9 @@
 /** @format */
 
 import Patient from "../components/Patient";
+import withData from "../lib/withData";
+import { withAuthSync } from "../unities/auth";
 
-const PatientPage = () => <Patient />;
+const PatientPage = withData(() => <Patient />);
 
-export default PatientPage;
+export default withAuthSync(PatientPage);
