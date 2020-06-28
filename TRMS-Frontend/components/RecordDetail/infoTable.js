@@ -4,7 +4,7 @@ import { Input, Table, Button, Space } from "antd";
 import Highlighter from 'react-highlight-words';
 import PropTypes from "prop-types";
 import { SearchOutlined } from "@ant-design/icons";
-import { Trash, Edit, Info } from "react-feather";
+import { Trash, Edit } from "react-feather";
 import { useState, useRef } from "react";
 
 import { DataTableFrame } from "../styles/DataTable";
@@ -134,17 +134,6 @@ const InfoTable = 	({ showEditAction, showDeleteAction, dataSource }) => {
 					key: "action",
 					render: (text, examination) => (
 						<span>
-							<Button
-								type={"primary"}
-								icon={
-									<Info
-										color={defaultIconColor}
-										size={defaultIconSize}
-									/>
-								}
-								size={defaultActionBtnSize}
-								className={"btn-action-style"}
-							/>
 							<Button
 								type={"primary"}
 								icon={

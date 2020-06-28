@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
 import { Card, Modal, message } from "antd";
@@ -9,20 +9,19 @@ import {
 	QuestionCircleOutlined,
 } from "@ant-design/icons";
 import { useQuery, useMutation } from "@apollo/react-hooks";
+import moment from "moment";
 
 import { DataTableFrame } from "../styles/DataTable";
 import RecordForm from "./Form/form";
 import { FORM_MODE } from "../../const/componentConst";
 import InforTable from "./infoTable";
 import InputPanel from "../shared/InputPanel";
-import moment from "moment";
 import {
 	FETCH_AS_PATIENT,
 	CREATE,
 	UPDATE,
 	DELETE,
 } from "../../const/gql/examination";
-
 const { confirm } = Modal;
 
 const defaultModel = {
@@ -45,6 +44,7 @@ function RecordDetail({
 	const [model, setModel] = useState(defaultModel);
 	const [recordId, setRecordId] = useState(null);
 	
+
 	useEffect(() => {
 		setRecordId(router.query.recordId);
 	}, []);
@@ -53,7 +53,7 @@ function RecordDetail({
 		createExamination,
 		{ loading: createLoading, error: createError },
 	] = useMutation(CREATE);
-	
+
 	const [
 		deleteExamination,
 		{ loading: deleteLoading, error: deleteError },
@@ -70,8 +70,6 @@ function RecordDetail({
 		fetchPolicy: "no-cache",
 		notifyOnNetworkStatusChange: true,
 	});
-
-	
 
 	useEffect(() => {
 		let fetchErr = fetchingError ? `${fetchingError.message}` : null;
@@ -117,13 +115,19 @@ function RecordDetail({
 						},
 					},
 					update: (proxy, mutationResult) => {
-						console.log("mutationResultmutationResult: ", mutationResult);
-						
+						console.log(
+							"mutationResultmutationResult: ",
+							mutationResult
+						);
+
 						if (
 							mutationResult.data &&
 							mutationResult.data.createExamination.ok
 						) {
-							setModel(mutationResult.data.createExamination.examination);
+							setModel(
+								mutationResult.data.createExamination
+									.examination
+							);
 							message.success("Tạo mới lần khám thành công!");
 						} else
 							message.error(
@@ -216,6 +220,7 @@ function RecordDetail({
 				onSubmit={handleSubmit}
 				dataRefresh={refetch}
 			/>
+			
 			<DataTableFrame>
 				<InforTable
 					showEditAction={showUpdateForm}

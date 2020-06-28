@@ -1,17 +1,24 @@
 /** @format */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
-import { Card, Modal, message } from "antd";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { Card, Modal, message, Button } from "antd";
+import { ExclamationCircleOutlined, RobotOutlined } from "@ant-design/icons";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 
 import { DataTableFrame } from "../styles/DataTable";
 import RecordForm from "./form";
 import { FORM_MODE } from "../../const/componentConst";
 import InforTable from "./infoTable";
+import { FACE_ADD_URL, FACE_HEADER, FACE_RCN_URL } from "../../const/url";
 import { FETCH_ALL, CREATE, UPDATE, DELETE } from "../../const/gql/record";
+import Webcam from "./Form/webcam";
+import WebcamRecognition from "./Form/webcamRecognition";
 const { confirm } = Modal;
+
+const defaultIconSize = 20;
+const defaultIconColor = "white";
+const defaultActionBtnSize = "default";
 
 const defaultModel = {
 	name: "",
@@ -19,7 +26,7 @@ const defaultModel = {
 	gender: "",
 	address: "",
 	infomation: "",
-	ssid: 0
+	ssid: 0,
 };
 
 function RecordManagement({
@@ -31,6 +38,26 @@ function RecordManagement({
 }) {
 	const [formMode, setFormMode] = useState(FORM_MODE.NONE);
 	const [model, setModel] = useState(defaultModel);
+	const [isShowWebcam, setWebcam] = useState(0);
+	const [isShowWebcamRecog, setWebcamRecog] = useState(false);
+
+	const offWebcamModal = useCallback(() => {
+		setWebcam(0);
+	}, []);
+	const showWebcamModal = useCallback(
+		(recordId) => () => {
+			setWebcam(recordId);
+		},
+		[]
+	);
+
+	const offWebcamModalRecog = useCallback(() => {
+		setWebcamRecog(false);
+	}, [isShowWebcamRecog]);
+	const showWebcamModalRecog = useCallback(() => {
+		setWebcamRecog(true);
+	}, [isShowWebcamRecog]);
+
 	const [
 		createRecord,
 		{ loading: createLoading, error: createError },
@@ -81,8 +108,7 @@ function RecordManagement({
 		...e,
 		key: e.id,
 	}));
-	console.log("dataSource: ", dataSource);
-	
+
 	const showDeleteModal = (record) => {
 		confirm({
 			title: "Xác nhận?",
@@ -127,11 +153,21 @@ function RecordManagement({
 		// process formValues
 		switch (formMode) {
 			case FORM_MODE.REGISTER:
+				fetch(FACE_ADD_URL, {
+					method: "POST",
+					headers: { ...FACE_HEADER },
+					body: JSON.stringify({
+						username: formValues.ssid,
+						password: formValues.ssid,
+					}),
+				})
+					.then((res) => res.json())
+					.then((res) => {
+						console.log("res from the face create user", res);
+					});
 				createRecord({
 					variables: { patientInfo: formValues },
 					update: (proxy, mutationResult) => {
-						console.log("Create result: ", mutationResult);
-						
 						message.success("Thêm mới bệnh nhân thành công!");
 						refetch();
 					},
@@ -158,9 +194,33 @@ function RecordManagement({
 	};
 	return (
 		<Card
-			title="Quản lý bệnh án "
+			title={
+				<div>
+					<span>Quản lý bệnh án</span>
+					<Button
+						type={"primary"}
+						icon={
+							<RobotOutlined
+								color={defaultIconColor}
+								size={defaultIconSize}
+							/>
+						}
+						size={defaultActionBtnSize}
+						className={"btn-action-style"}
+						onClick={showWebcamModalRecog}
+						style={{marginLeft: "10px"}}
+					>
+						Nhận diện khuôn mặt
+					</Button>
+				</div>
+			}
 			extra={<a onClick={() => showRegisterForm()}>Thêm bệnh án</a>}
 		>
+			<WebcamRecognition
+				isShow={isShowWebcamRecog}
+				onCancel={offWebcamModalRecog}
+			/>
+			<Webcam isShow={isShowWebcam} onCancel={offWebcamModal} />
 			<RecordForm
 				mode={formMode}
 				model={model}
@@ -172,6 +232,7 @@ function RecordManagement({
 					showEditAction={showUpdateForm}
 					showDeleteAction={showDeleteForm}
 					dataSource={dataSource}
+					showWebcam={showWebcamModal}
 				/>
 			</DataTableFrame>
 		</Card>

@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import { useState, useRef } from "react";
 import Link from "next/link";
 import moment from "moment";
-import { Trash, Edit } from "react-feather";
+import { Trash, Edit, Camera } from "react-feather";
 import { SearchOutlined } from "@ant-design/icons";
 
 import { DataTableFrame } from "../styles/DataTable";
@@ -25,7 +25,7 @@ const checkStatus = (apmArray) => {
 		.fromNow()}`;
 };
 
-const InfoTable = ({ showEditAction, showDeleteAction, dataSource }) => {
+const InfoTable = ({ showEditAction, showDeleteAction, dataSource, showWebcam }) => {
 	var searchInput = React.createRef(null);
 	const [searchText, setSearchText] = useState("");
 	const [searchedColumn, setSearchedColumn] = useState("");
@@ -164,6 +164,18 @@ const InfoTable = ({ showEditAction, showDeleteAction, dataSource }) => {
 					key: "action",
 					render: (text, record) => (
 						<span>
+							<Button
+								type={"primary"}
+								icon={
+									<Camera
+										color={defaultIconColor}
+										size={defaultIconSize}
+									/>
+								}
+								size={defaultActionBtnSize}
+								className={"btn-action-style"}
+								onClick={showWebcam(record.id)}
+							/>
 							<Button
 								type={"primary"}
 								icon={

@@ -38,6 +38,7 @@
     "react-sticky": "^6.0.3",
     "react-virtualized": "^9.21.2",
     "react-vis": "^1.11.7",
+    "react-webcam": "^5.2.0",
     "redux-devtools-extension": "^2.13.8",
     "reqwest": "^2.0.5",
     "simplebar-react": "^2.1.0",

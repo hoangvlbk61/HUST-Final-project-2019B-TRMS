@@ -110,11 +110,10 @@ function AppointmentManagement({
 	}));
 
 	const showDeleteModal = (apm) => {
-		
 		confirm({
 			title: "Xác nhận?",
 			icon: <ExclamationCircleOutlined />,
-			content: "Bạn có chắc muốn xóa loại thuốc này",
+			content: "Bạn có chắc muốn xóa cuộc hẹn này",
 			okText: "Có",
 			okType: "danger",
 			cancelText: "Hủy",
@@ -123,8 +122,8 @@ function AppointmentManagement({
 					variables: { appointmentId: parseInt(apm.id) },
 					update: (proxy, mutationResult) => {
 						if (
-							mutationResult.data.createAppointment &&
-							mutationResult.data.createAppointment.ok
+							mutationResult.data.deleteAppointment &&
+							mutationResult.data.deleteAppointment.ok
 						) {
 							message.success(
 								`Xóa cuộc hẹn lúc ${moment(apm.time)
