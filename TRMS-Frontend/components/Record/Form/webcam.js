@@ -42,7 +42,7 @@ const WebcamCapture = ({ isShow, onCancel }) => {
 
 	const save = () => {
 		// console.log("recordId ", isShow);
-
+		setLoading(true);
 		var formData = new FormData();
 		formData.append("image", imageSrc);
 		formData.append("req_type", "ADD");
@@ -61,6 +61,7 @@ const WebcamCapture = ({ isShow, onCancel }) => {
 					message.error("Đã xảy ra lỗi !");
 				}
 			});
+		setLoading(false);
 	};
 
 	return (
@@ -72,7 +73,7 @@ const WebcamCapture = ({ isShow, onCancel }) => {
 			visible={!!parseInt(isShow)}
 			onCancel={onCancel}
 		>
-			<Spin tip="Đang tải ..." size="large" spinning={isLoading}>
+			<Spin tip="Đang xử lý ảnh ..." size="large" spinning={isLoading}>
 				{!isShowImage && (
 					<Webcam
 						audio={false}

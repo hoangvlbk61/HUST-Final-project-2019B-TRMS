@@ -2,6 +2,7 @@ import face_recognition
 import os
 import cv2
 import json
+from numpy import asarray, save, load, savetxt, loadtxt
 
 KNOWN_FACES_DIR = 'media/'
 TOLERANCE = 0.6
@@ -18,9 +19,7 @@ def name_to_color(name):
     color = [(ord(c.lower())-97)*8 for c in name[:3]]
     return color
 
-
-def face_recog(need_recog_image): 
-    print('Loading known faces...')
+def train_models(): 
     known_faces = []
     known_names = []
 
@@ -28,18 +27,27 @@ def face_recog(need_recog_image):
         for filename in os.listdir(f'{KNOWN_FACES_DIR}/{name}'):
             image = face_recognition.load_image_file(
                 f'{KNOWN_FACES_DIR}/{name}/{filename}')
-            print("======================: ", filename)
             ecd = face_recognition.face_encodings(image)
             if(len(ecd) != 0): 
                 encoding = face_recognition.face_encodings(image)[0]
                 # Append encodings and name
                 known_faces.append(encoding)
                 known_names.append(name)
+                
+    dataFaces = asarray(known_faces)
+    dataNames = asarray([known_names])
+    save('utils/face.npy', dataFaces)
+    save('utils/name.npy', dataNames)
+
+def face_recog(need_recog_image): 
+    print('Loading known faces...')
+    known_faces = load('utils/face.npy')
+    known_names = load('utils/name.npy')[0]
 
     print('Processing unknown faces...')
-    locations = face_recognition.face_locations(image, model=MODEL)
-    encodings = face_recognition.face_encodings(image, locations)
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    recog_image = face_recognition.load_image_file(need_recog_image)
+    locations = face_recognition.face_locations(recog_image, model=MODEL)
+    encodings = face_recognition.face_encodings(recog_image, locations)
 
     print(f', found {len(encodings)} face(s)')
     for face_encoding, face_location in zip(encodings, locations):

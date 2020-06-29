@@ -3,7 +3,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from .models import User, UserImage
 from json import dumps, loads
 from django.views.decorators.csrf import csrf_exempt
-from utils.face_rec_faces import face_recog
+from utils.face_rec_faces import face_recog, train_models
 import base64
 from django.core.files.base import ContentFile
 @csrf_exempt
@@ -30,6 +30,7 @@ def user_image(request):
                 ext = fileformat.split('/')[-1] 
                 data = ContentFile(base64.b64decode(imgstr), name=str(user.id) +"." + ext)
                 ui = UserImage.objects.create(user = user, images = data)
+                train_models()
                 return HttpResponse(dumps({"result": "ok", "status": 200}))
             elif(req_type == "CHECK"): 
                 img = request.POST.get("image")
